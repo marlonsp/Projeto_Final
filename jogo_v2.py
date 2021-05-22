@@ -76,7 +76,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
 
-# class (pygame.sprite.Sprite):
+# class(pygame.sprite.Sprite):
 
 all_sprites = pygame.sprite.Group()
 player = Player(player_img)
