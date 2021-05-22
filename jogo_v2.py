@@ -18,9 +18,9 @@ clock = pygame.time.Clock()
 FPS = 60
 
 class Player(pygame.sprite.Sprite):
-    def _init_(self, img):
+    def __init__(self, img):
         # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite._init_(self)
+        pygame.sprite.Sprite.__init__(self)
 
         self.spritesl = []
         self.spritesr = []
