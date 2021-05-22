@@ -7,7 +7,6 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Jogo.v1')
 teste = pygame.image.load('assets/img/player_test.png')
 pygame.display.set_icon(teste)
-
 # ----- Inicia assets
 PLAYER_WIDTH = 30
 PLAYER_HEIGHT = 30
@@ -28,12 +27,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = WIDTH / 2
         self.rect.y = HEIGHT / 2
         self.speedx = 0
-        self.speedy = 0
+        self.wleft = False #Verificar movimento p/ esquerda para iniciar animação
+        self.wright = False #Verificar movimento p/ direita para iniciar animação
+        self.wcount = 0 #Contagem p/ os frames do movimento
 
     def update(self):
         # Atualizando a posição
         self.rect.x += self.speedx
-        self.rect.y += self.speedy
  
         # Mantem dentro da tela
         if self.rect.right > WIDTH:
@@ -44,6 +44,8 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
+
+# class (pygame.sprite.Sprite):
 
 all_sprites = pygame.sprite.Group()
 player = Player(player_img)
@@ -63,15 +65,12 @@ while game:
             # Dependendo da tecla, altera a velocidade.
             keys_down[event.key] = True
             if event.key == pygame.K_LEFT:
+                player.wleft = True
                 player.speedx -= 8
             if event.key == pygame.K_RIGHT:
+                player.wright = True
                 player.speedx += 8
-            if event.key == pygame.K_UP:
-                player.speedy -= 8
-            if event.key == pygame.K_DOWN:
-                player.speedy += 8
-            if event.key == pygame.K_SPACE:
-                player.shoot()
+
         # Verifica se soltou alguma tecla.
         if event.type == pygame.KEYUP:
             # Dependendo da tecla, altera a velocidade.
@@ -80,16 +79,11 @@ while game:
                     player.speedx += 8
                 if event.key == pygame.K_RIGHT:
                     player.speedx -= 8
-                if event.key == pygame.K_UP:
-                    player.speedy += 8
-                if event.key == pygame.K_DOWN:
-                    player.speedy -= 8 
-
-    all_sprites.update()
 
     # ----- Gera saídas
-    window.fill((0, 0, 0))  # Preenche com a cor branca
+    window.fill((200, 200, 200))  # Preenche com a cor branca
     all_sprites.draw(window)
+    all_sprites.update()
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
