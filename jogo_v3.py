@@ -4,7 +4,7 @@ pygame.init()
 WIDTH = 1080
 HEIGHT = 607
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Jogo.v1')
+pygame.display.set_caption('Jogo.v2')
 teste = pygame.image.load('assets/img/player_test.png')
 pygame.display.set_icon(teste)
 # ----- Inicia assets
