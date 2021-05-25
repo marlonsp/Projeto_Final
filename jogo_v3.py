@@ -7,9 +7,13 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Jogo.v3')
 teste = pygame.image.load('assets/img/player_test.png')
 pygame.display.set_icon(teste)
+background = pygame.image.load('assets/img/fundo.png')
+background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+tela_in = pygame.image.load('assets/img/up.png')
+tela_in = pygame.transform.scale(tela_in, (WIDTH, HEIGHT))
 # ----- Inicia assets
-PLAYER_WIDTH = 30
-PLAYER_HEIGHT = 30
+PLAYER_WIDTH = 120
+PLAYER_HEIGHT = 120
 font = pygame.font.SysFont(None, 48)
 player_img = pygame.image.load('assets/img/Marlin_r.png').convert_alpha()
 player_img = pygame.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
@@ -41,7 +45,7 @@ class Player(pygame.sprite.Sprite):
         self.wleft = False #Verificar movimento p/ esquerda para iniciar animação
         self.wright = False #Verificar movimento p/ direita para iniciar animação
         self.wcount = 0 #Contagem p/ os frames do movimento
-        self.jump = False #Verificr se está pulando
+        self.jump = False #Verificar se está pulando
 
     def update(self):
         #imagem parado
@@ -70,7 +74,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
         if self.jump == True:
-            if self.rect.y <= 400:
+            if self.rect.y <= 300:
                 self.jump = False
             self.rect.y -=20
  
@@ -142,6 +146,7 @@ while game:
 
     # ----- Gera saídas
     window.fill((200, 200, 200))  # Preenche com a cor branca
+    window.blit(background,(0,0))
     all_sprites.draw(window)
     all_sprites.update()
 
