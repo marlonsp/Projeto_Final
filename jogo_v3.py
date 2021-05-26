@@ -15,7 +15,7 @@ pygame.display.set_icon(teste)
 PLAYER_WIDTH = 120
 PLAYER_HEIGHT = 120
 assets = {}
-assets['background'] = pygame.image.load('assets/img/fundo.png')
+assets['background'] = pygame.image.load('assets/img/fundo1.png')
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
 assets['init_img'] = pygame.image.load('assets/img/init_img.png')
 assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
