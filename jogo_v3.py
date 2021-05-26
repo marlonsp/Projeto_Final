@@ -7,6 +7,8 @@ HEIGHT = 607
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Jogo.v3')
 
+BLACK = (0, 0, 0)
+
 teste = pygame.image.load('assets/img/player_test.png')
 pygame.display.set_icon(teste)
 # ----- Inicia assets
@@ -15,16 +17,21 @@ PLAYER_HEIGHT = 120
 assets = {}
 assets['background'] = pygame.image.load('assets/img/fundo.png')
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
+assets['init_img'] = pygame.image.load('assets/img/up.png')
+assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
 assets['tela_in'] = pygame.image.load('assets/img/up.png')
 assets['tela_in'] = pygame.transform.scale(assets['tela_in'], (WIDTH, HEIGHT))
-assets['player_img'] = pygame.image.load('assets/img/Marlin_r.png').convert_alpha()
-assets['player_img'] = pygame.transform.scale(assets['player_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+assets['player_r_img'] = pygame.image.load('assets/img/guitas_r.png').convert_alpha()
+assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_alpha()
+assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').convert_alpha()
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
 assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
 clock = pygame.time.Clock()
 FPS = 60
 
+#Classes do Jogador
 class Player(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
@@ -32,15 +39,15 @@ class Player(pygame.sprite.Sprite):
 
         self.spritesl = []
         self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-2.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-3.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-4.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-3.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-4.png').convert_alpha())
-        self.image = assets['player_img']
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
+        self.image = assets['player_l_img']
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH / 2
@@ -55,7 +62,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         #imagem parado
         if self.wright and self.wleft:
-            self.image = player_img
+            self.image = player.image
         else:
             #Imagens de movimentação p/ esquerda
             if self.wleft:
@@ -72,7 +79,7 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.spritesr[int(self.wcount)]
                 self.image = pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
             else:
-                self.image = assets['player_img']
+                self.image = assets['player_r_img']
 
         # Atualizando a posição
         self.rect.x += self.speedx
@@ -96,6 +103,7 @@ class Player(pygame.sprite.Sprite):
     def jumping(self):
         self.jump = True
 
+#Classes dos Bolinhos
 class Bolinho(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
@@ -131,72 +139,95 @@ score = 0
 
 game = True
 
-while game:
+DONE = 0
+INIT = 1
+PLAYING = 2
+
+init_rect = assets['background'].get_rect()
+
+state = INIT
+
+while state != DONE:
     clock.tick(FPS)
-    # ----- Trata eventos
-    for event in pygame.event.get():
-        # ----- Verifica consequências
-        if event.type == pygame.QUIT:
-            game = False
-        if event.type == pygame.KEYDOWN:
-            # Dependendo da tecla, altera a velocidade.
-            keys_down[event.key] = True
-            if event.key == pygame.K_LEFT:
-                player.wleft = True
-                player.speedx -= 10
-            if event.key == pygame.K_RIGHT:
-                player.wright = True
-                player.speedx += 10
-            if event.key == pygame.K_UP:
-                if player.rect.y != HEIGHT - PLAYER_HEIGHT - 50:
-                    pass
-                else:
-                    player.jumping()
 
-        # Verifica se soltou alguma tecla.
-        if event.type == pygame.KEYUP:
-            # Dependendo da tecla, altera a velocidade.
-            if event.key in keys_down and keys_down[event.key]:
+    if state == INIT:
+            # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                state = PLAYING
+
+        window.fill(BLACK)
+        window.blit(assets['init_img'], init_rect)
+
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+
+    if state == PLAYING:
+        # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                # Dependendo da tecla, altera a velocidade.
+                keys_down[event.key] = True
                 if event.key == pygame.K_LEFT:
-                    player.wleft = False
-                    player.speedx += 10
-                    player_img = pygame.image.load('assets/img/Marlin_l.png').convert_alpha()
-                    player_img = pygame.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
-                if event.key == pygame.K_RIGHT:
-                    player.wright = False
+                    player.wleft = True
                     player.speedx -= 10
-                    player_img = pygame.image.load('assets/img/Marlin_r.png').convert_alpha()
-                    player_img = pygame.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
+                if event.key == pygame.K_RIGHT:
+                    player.wright = True
+                    player.speedx += 10
                 if event.key == pygame.K_UP:
-                    player.speedy = 10
+                    if player.rect.y != HEIGHT - PLAYER_HEIGHT - 50:
+                        pass
+                    else:
+                        player.jumping()
 
-    hits = pygame.sprite.spritecollide(player, all_bolinhos, True)
-    if len(hits) == 1:
-        score += 1
-        bolinho = Bolinho(assets)
-        all_sprites.add(bolinho)
-        all_bolinhos.add(bolinho)
-    elif len(hits) == 2:
-        score += 2
-        for i in range(2):
+            # Verifica se soltou alguma tecla.
+            if event.type == pygame.KEYUP:
+                # Dependendo da tecla, altera a velocidade.
+                if event.key in keys_down and keys_down[event.key]:
+                    if event.key == pygame.K_LEFT:
+                        player.wleft = False
+                        player.speedx += 10
+                        player.image = assets['player_l_img'] 
+                    if event.key == pygame.K_RIGHT:
+                        player.wright = False
+                        player.speedx -= 10
+                        player.image = assets['player_r_img'] 
+                    if event.key == pygame.K_UP:
+                        player.speedy = 10
+
+        hits = pygame.sprite.spritecollide(player, all_bolinhos, True)
+        if len(hits) == 1:
+            score += 1
             bolinho = Bolinho(assets)
             all_sprites.add(bolinho)
             all_bolinhos.add(bolinho)
-    
+        elif len(hits) == 2:
+            score += 2
+            for i in range(2):
+                bolinho = Bolinho(assets)
+                all_sprites.add(bolinho)
+                all_bolinhos.add(bolinho)
+        
 
 
     # ----- Gera saídas
-    window.fill((200, 200, 200))  # Preenche com a cor branca
-    window.blit(assets['background'],(0,0))
+        window.fill((200, 200, 200))  # Preenche com a cor branca
+        window.blit(assets['background'],(0,0))
 
-    text_surface = assets['score_font'].render("{:03d}".format(score), True, (0, 255, 255))
-    text_rect = text_surface.get_rect()
-    text_rect.midtop = (WIDTH / 2,  10)
+        text_surface = assets['score_font'].render("Pontos:{:01d}".format(score), True, (0, 255, 255))
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (WIDTH / 2,  10)
 
-    window.blit(text_surface, text_rect)
-    all_sprites.draw(window)
-    all_sprites.update()
+        window.blit(text_surface, text_rect)
+        all_sprites.draw(window)
+        all_sprites.update()
 
     # ----- Atualiza estado do jogo
-    pygame.display.update()  # Mostra o novo frame para o jogador
+        pygame.display.update()  # Mostra o novo frame para o jogador
 pygame.quit()
