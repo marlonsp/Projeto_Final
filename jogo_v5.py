@@ -5,7 +5,7 @@ pygame.init()
 WIDTH = 1080
 HEIGHT = 607
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Jogo.v3')
+pygame.display.set_caption('Jogo.v4')
 
 BLACK = (0, 0, 0)
 
@@ -19,9 +19,9 @@ assets['background'] = pygame.image.load('assets/img/fundo.png')
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
 assets['init_img'] = pygame.image.load('assets/img/init_img.png')
 assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
-assets['player_r_img'] = pygame.image.load('assets/img/Marlin_r.png').convert_alpha()
+assets['player_r_img'] = pygame.image.load('assets/img/guitas_r.png').convert_alpha()
 assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-assets['player_l_img'] = pygame.image.load('assets/img/Marlin_l.png').convert_alpha()
+assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_alpha()
 assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').convert_alpha()
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
@@ -41,15 +41,15 @@ class Player(pygame.sprite.Sprite):
 
         self.spritesl = []
         self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-2.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-3.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-4.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-3.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-4.png').convert_alpha())
-        self.image = assets['player_l_img']
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
+        self.image = assets['player_r_img']
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH / 2
@@ -99,8 +99,8 @@ class Player(pygame.sprite.Sprite):
             self.rect.left = 0
         if self.rect.top < 0:
             self.rect.top = 0
-        if self.rect.bottom > HEIGHT-50:
-            self.rect.bottom = HEIGHT-50
+        if self.rect.bottom > HEIGHT-70:
+            self.rect.bottom = HEIGHT-70
 
     def jumping(self):
         self.jump = True
@@ -113,12 +113,49 @@ class Bolinho(pygame.sprite.Sprite):
         self.image = assets['bolinho_img']
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(50, WIDTH-50)
+        self.rect.x = random.randint(0, WIDTH-50)
         self.rect.y = random.randint(250, 500)
     
     def update(self):
         self.rect.x += 0
         self.rect.y += 0
+
+def char_change(char_choose):
+    player.spritesr = []
+    player.spritesl = []
+    if char_choose == 1:
+        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-1.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-2.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-3.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-4.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-1.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-2.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-3.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-4.png').convert_alpha())
+        assets['player_r_img'] = pygame.image.load('assets/img/fer_r.png').convert_alpha()
+        assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+    if char_choose == 2:
+        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-1.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-2.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-3.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-4.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-1.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-2.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-3.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-4.png').convert_alpha())
+        assets['player_r_img'] = pygame.image.load('assets/img/Marlin_r.png').convert_alpha()
+        assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+    if char_choose == 3:
+        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
+        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
+        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
+        assets['player_r_img'] = pygame.image.load('assets/img/guitas_r.png').convert_alpha()
+        assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 
 all_sprites = pygame.sprite.Group()
 all_bolinhos = pygame.sprite.Group()
@@ -143,7 +180,8 @@ game = True
 
 DONE = 0
 INIT = 1
-PLAYING = 2
+CHOOSE = 2
+PLAYING = 3
 
 init_rect = assets['background'].get_rect()
 init_count = 0
@@ -159,14 +197,40 @@ while state != DONE:
             if event.type == pygame.QUIT:
                 state = DONE
             if event.type == pygame.KEYDOWN:
-                while init_count < 4:
-                    init_count += 0.1
-                    assets['init_img'] = init_anim[int(init_count)]
-                    window.blit(assets['init_img'], init_rect)
-                state = PLAYING
+                # while init_count < 4:
+                #     init_count += 0.1
+                #     assets['init_img'] = init_anim[int(init_count)]
+                #     window.blit(assets['init_img'], init_rect)
+                state = CHOOSE
 
         window.fill(BLACK)
         window.blit(assets['init_img'], init_rect)
+
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+
+    if state == CHOOSE:
+            # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_a:
+                    char_choose = 1
+                    char_change(char_choose)
+                    state = PLAYING
+                if event.key == pygame.K_s:
+                    char_choose = 2
+                    char_change(char_choose)
+                    state = PLAYING
+                if event.key == pygame.K_d:
+                    char_choose = 3
+                    char_change(char_choose)
+                    state = PLAYING
+
+        window.fill(BLACK)
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
@@ -187,7 +251,7 @@ while state != DONE:
                     player.wright = True
                     player.speedx += 10
                 if event.key == pygame.K_UP:
-                    if player.rect.y != HEIGHT - PLAYER_HEIGHT - 50:
+                    if player.rect.y != HEIGHT - PLAYER_HEIGHT - 70:
                         pass
                     else:
                         player.jumping()
