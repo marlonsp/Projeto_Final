@@ -17,6 +17,8 @@ PLAYER_HEIGHT = 120
 assets = {}
 assets['background'] = pygame.image.load('assets/img/fundo1.png')
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
+assets['charchoose_img'] = pygame.image.load('assets/img/char_choose.png')
+assets['charchoose_img'] = pygame.transform.scale(assets['charchoose_img'], (WIDTH, HEIGHT))
 assets['init_img'] = pygame.image.load('assets/img/init_img.png')
 assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
 assets['player_r_img'] = pygame.image.load('assets/img/guitas_r.png').convert_alpha()
@@ -231,6 +233,7 @@ while state != DONE:
                     state = PLAYING
 
         window.fill(BLACK)
+        window.blit(assets['charchoose_img'], init_rect)
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
