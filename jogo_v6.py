@@ -32,6 +32,12 @@ assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_r.png').conver
 assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_l.png').convert_alpha()
 assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+assets['vida=3'] = pygame.image.load('assets/img/vida1.png').convert_alpha()
+assets['vida=3'] = pygame.transform.scale(assets['vida=3'], (200, 200))
+assets['vida=2'] = pygame.image.load('assets/img/vida2.png').convert_alpha()
+assets['vida=2'] = pygame.transform.scale(assets['vida=2'], (200, 200))
+assets['vida=1'] = pygame.image.load('assets/img/vida3.png').convert_alpha()
+assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
 clock = pygame.time.Clock()
 FPS = 60
 
@@ -187,6 +193,26 @@ class Capivara(pygame.sprite.Sprite):
         else:
             self.image = assets['capivara_r_img']
 
+class Vidas(pygame.sprite.Sprite):
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = assets['vida=3']
+        self.rect = self.image.get_rect()
+        self.rect.x = 900
+        self.rect.y = 10
+        self.vidas = 3
+
+    def update(self):
+        if self.vidas == 3:
+            self.image = assets['vida=3']
+        elif self.vidas == 2:
+            self.image = assets['vida=2']
+        else:
+            self.image = assets['vida=1']
+
+
 def char_change(char_choose):
     player.spritesr = []
     player.spritesl = []
@@ -229,7 +255,7 @@ def char_change(char_choose):
         assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
         assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_alpha()
         assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-
+    
 all_sprites = pygame.sprite.Group()
 all_bolinhos = pygame.sprite.Group()
 all_capivaras = pygame.sprite.Group()
@@ -241,6 +267,7 @@ groups['all_capivaras'] = all_capivaras
 player = Player(assets)
 bolinho = Bolinho(assets)
 capivara = Capivara(assets)
+vida = Vidas(assets)
 
 for i in range(2):
     bolinho = Bolinho(assets)
@@ -253,12 +280,11 @@ for i in range(2):
     all_capivaras.add(capivara)
 
 all_sprites.add(player)
+all_sprites.add(vida)
 
 keys_down = {}
 
 score = 0
-
-vidas = 3
 
 game = True
 
@@ -369,19 +395,20 @@ while state != DONE:
                 bolinho = Bolinho(assets)
                 all_sprites.add(bolinho)
                 all_bolinhos.add(bolinho)
+
         hits = pygame.sprite.spritecollide(player, all_capivaras, True)
         if len(hits) == 1:
-            vidas -= 1
+            vida.vidas -= 1
             capivara = Capivara(assets)
             all_sprites.add(capivara)
             all_capivaras.add(capivara)
         elif len(hits) == 2:
-            vidas -= 1
+            vida.vidas -= 1
             for i in range(2):
                 capivara = Capivara(assets)
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
-        if vidas == 0:
+        if vida.vidas == 0:
             state = GAMEOVER
 
 
@@ -400,7 +427,7 @@ while state != DONE:
     # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
     if state == GAMEOVER:
-        vidas = 3
+        vida.vidas = 3
         player.speedx = 0
         player.wleft = False
         player.wright = False
