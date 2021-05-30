@@ -33,15 +33,15 @@ assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').conv
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
 assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
 assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha()
-<<<<<<< HEAD
+
 assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha()
 assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-=======
+
 assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
 assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha()
 assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
->>>>>>> 63051ea96856684e45c88a9c80a58b4131c4e32c
+
 assets['vida=3'] = pygame.image.load('assets/img/vida1.png').convert_alpha()
 assets['vida=3'] = pygame.transform.scale(assets['vida=3'], (200, 200))
 assets['vida=2'] = pygame.image.load('assets/img/vida2.png').convert_alpha()
