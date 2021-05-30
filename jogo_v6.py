@@ -258,12 +258,15 @@ keys_down = {}
 
 score = 0
 
+vidas = 3
+
 game = True
 
 DONE = 0
 INIT = 1
 CHOOSE = 2
 PLAYING = 3
+GAMEOVER = 4
 
 init_rect = assets['background'].get_rect()
 init_count = 0
@@ -366,7 +369,20 @@ while state != DONE:
                 bolinho = Bolinho(assets)
                 all_sprites.add(bolinho)
                 all_bolinhos.add(bolinho)
-        
+        hits = pygame.sprite.spritecollide(player, all_capivaras, True)
+        if len(hits) == 1:
+            vidas -= 1
+            capivara = Capivara(assets)
+            all_sprites.add(capivara)
+            all_capivaras.add(capivara)
+        elif len(hits) == 2:
+            vidas -= 1
+            for i in range(2):
+                capivara = Capivara(assets)
+                all_sprites.add(capivara)
+                all_capivaras.add(capivara)
+        if vidas == 0:
+            state = GAMEOVER
 
 
     # ----- Gera saídas
@@ -383,4 +399,19 @@ while state != DONE:
 
     # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
+    if state == GAMEOVER:
+        vidas = 3
+        player.speedx = 0
+        player.wleft = False
+        player.wright = False
+            # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                state = CHOOSE
+        window.fill(BLACK)
+        window.blit(assets['init_img'], init_rect)
+        pygame.display.flip()
 pygame.quit()
