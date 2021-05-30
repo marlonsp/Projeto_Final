@@ -19,13 +19,17 @@ assets['background'] = pygame.image.load('assets/img/fundo1.png')
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
 assets['init_img'] = pygame.image.load('assets/img/init_img.png')
 assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
-assets['player_r_img'] = pygame.image.load('assets/img/guitas_r.png').convert_alpha()
+assets['player_r_img'] = pygame.image.load('assets/img/fer_r.png').convert_alpha()
 assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_alpha()
+assets['player_l_img'] = pygame.image.load('assets/img/fer_l.png').convert_alpha()
 assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').convert_alpha()
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
 assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
+assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_r.png.png').convert_alpha()
+assets['capivara_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_l.png').convert_alpha()
+assets['capivara_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 clock = pygame.time.Clock()
 FPS = 60
 
@@ -37,14 +41,14 @@ class Player(pygame.sprite.Sprite):
 
         self.spritesl = []
         self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/fer_move_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/fer_move_r-2.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/fer_move_r-3.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/fer_move_r-4.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/fer_move_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/fer_move_l-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/fer_move_l-3.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/fer_move_l-4.png').convert_alpha())
         self.image = assets['player_l_img']
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
@@ -228,4 +232,43 @@ while state != DONE:
 
     # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
+
+    class inimigo(pygame.sprite.Sprite):
+        def __init__(self, x, y, assets, end):
+            pygame.sprite.Sprite.__init__(self)
+
+            self.spritesl = []
+            self.spritesr = []
+            self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha())
+            self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-2.png').convert_alpha())
+            self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-3.png').convert_alpha())
+            self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-4.png').convert_alpha())
+            self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha())
+            self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-2.png').convert_alpha())
+            self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-3.png').convert_alpha())
+            self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-4.png').convert_alpha())
+            self.image = assets['capivara_l_img']
+            self.mask = pygame.mask.from_surface(self.image)
+            self.x = x
+            self.y = y
+            self.width = WIDTH
+            self.height = HEIGHT
+            self.end = end
+            self.path = [self.x, self.end]
+            self.walkCount = random.randint(1,66)
+            self.vel = random.randint(-150,150)/100
+            self.hitbox = (self.x + 17, self.y + 2, 31, 57)
+
+    def draw(self,win):
+        self.move()  
+        if self.walkCount + 1 >= 66:
+            self.walkCount = 0
+        if self.walkCount==48:
+            if self.vel > 0:
+                win.blit(self.walkRight[self.walkCount //6], (self.x, self.y)
+                self.walkCount += 1
+            else:
+                win.blit(self.walkLeft[self.walkCount //6], (self.x, self.y))
+                self.walkCount += 1
+        self.hitbox = (self.x + 17, self.y + 2, 31, 57)
 pygame.quit()
