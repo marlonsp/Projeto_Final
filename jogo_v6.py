@@ -2,10 +2,10 @@ import pygame
 import random
 
 pygame.init()
-WIDTH = 1080
-HEIGHT = 607
+WIDTH = 1100
+HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Jogo.v5')
+pygame.display.set_caption('Jogo.v6')
 
 BLACK = (0, 0, 0)
 
@@ -28,12 +28,12 @@ assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_
 assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').convert_alpha()
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
 assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
+assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_r.png').convert_alpha()
+assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_l.png').convert_alpha()
+assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 clock = pygame.time.Clock()
 FPS = 60
-
-init_anim = []
-for i in range(6):
-    init_anim.append(pygame.image.load('assets/img/init_anim1.png').convert_alpha())
 
 #Classes do Jogador
 class Player(pygame.sprite.Sprite):
@@ -107,6 +107,7 @@ class Player(pygame.sprite.Sprite):
     def jumping(self):
         self.jump = True
 
+
 #Classes dos Bolinhos
 class Bolinho(pygame.sprite.Sprite):
     def __init__(self, assets):
@@ -115,12 +116,76 @@ class Bolinho(pygame.sprite.Sprite):
         self.image = assets['bolinho_img']
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0, WIDTH-50)
+        self.rect.x = random.randint(50, WIDTH-50)
         self.rect.y = random.randint(250, 500)
     
     def update(self):
         self.rect.x += 0
         self.rect.y += 0
+
+class Capivara(pygame.sprite.Sprite):
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.spritesl = []
+        self.spritesr = []
+        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-2.png').convert_alpha())
+        self.image = assets['capivara_r_img']
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.start_or_end = random.randint(1,2)
+        if self.start_or_end == 1:
+            self.rect.x = 0 - PLAYER_WIDTH
+            self.speedx = random.randint(4, 8)
+        else:
+            self.rect.x = WIDTH + PLAYER_WIDTH
+            self.speedx = random.randint(-8, -4)
+        self.rect.y = 420
+        self.speedy = 0
+        self.wcount = 0 #Contagem p/ os frames do movimento
+
+    def update(self):
+        # Atualizando a posição do meteoro
+        self.rect.x += self.speedx
+        # novas posições e velocidades
+        if self.start_or_end == 1:
+            if self.rect.left > WIDTH:
+                self.start_or_end = random.randint(1,2)
+                if self.start_or_end == 1:
+                    self.rect.x = 0 - PLAYER_WIDTH
+                    self.speedx = random.randint(4, 8)
+                else:
+                    self.rect.x = WIDTH + PLAYER_WIDTH
+                    self.speedx = random.randint(-8, -4)
+        else:
+            if self.rect.right < 0:
+                self.start_or_end = random.randint(1,2)
+                if self.start_or_end == 1:
+                    self.rect.x = 0 - PLAYER_WIDTH
+                    self.speedx = random.randint(4, 8)
+                else:
+                    self.rect.x = WIDTH + PLAYER_WIDTH
+                    self.speedx = random.randint(-8, -4)
+        #Imagens de movimentação p/ esquerda
+        if self.speedx < 0:
+            self.wcount += 0.1
+            if self.wcount >= len(self.spritesl):
+                self.wcount = 0
+            self.image = self.spritesl[int(self.wcount)]
+            self.image = pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        #Imagens de movimentação p/ direita
+        elif self.speedx > 0:
+            self.wcount += 0.1
+            if self.wcount >= len(self.spritesr):
+                self.wcount = 0
+            self.image = self.spritesr[int(self.wcount)]
+            self.image = pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        else:
+            self.image = assets['capivara_r_img']
 
 def char_change(char_choose):
     player.spritesr = []
@@ -167,16 +232,25 @@ def char_change(char_choose):
 
 all_sprites = pygame.sprite.Group()
 all_bolinhos = pygame.sprite.Group()
+all_capivaras = pygame.sprite.Group()
+
 groups = {}
 groups['all_bolinhos'] = all_bolinhos
+groups['all_capivaras'] = all_capivaras
 
 player = Player(assets)
 bolinho = Bolinho(assets)
+capivara = Capivara(assets)
 
 for i in range(2):
     bolinho = Bolinho(assets)
     all_sprites.add(bolinho)
     all_bolinhos.add(bolinho)
+
+for i in range(2):
+    capivara = Capivara(assets)
+    all_sprites.add(capivara)
+    all_capivaras.add(capivara)
 
 all_sprites.add(player)
 
