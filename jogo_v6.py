@@ -14,6 +14,10 @@ pygame.display.set_icon(teste)
 # ----- Inicia assets
 PLAYER_WIDTH = 120
 PLAYER_HEIGHT = 120
+
+CAPIVARA_WIDTH = 120
+CAPIVARA_HEIGHT = 80
+
 assets = {}
 assets['background'] = pygame.image.load('assets/img/fundo1.png')
 assets['background'] = pygame.transform.scale(assets['background'], (WIDTH, HEIGHT))
@@ -28,10 +32,10 @@ assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_
 assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').convert_alpha()
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
 assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
-assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_r.png').convert_alpha()
-assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_l.png').convert_alpha()
-assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha()
+assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha()
+assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
 assets['vida=3'] = pygame.image.load('assets/img/vida1.png').convert_alpha()
 assets['vida=3'] = pygame.transform.scale(assets['vida=3'], (200, 200))
 assets['vida=2'] = pygame.image.load('assets/img/vida2.png').convert_alpha()
@@ -150,7 +154,7 @@ class Capivara(pygame.sprite.Sprite):
         else:
             self.rect.x = WIDTH + PLAYER_WIDTH
             self.speedx = random.randint(-8, -4)
-        self.rect.y = 420
+        self.rect.y = 450
         self.speedy = 0
         self.wcount = 0 #Contagem p/ os frames do movimento
 
@@ -182,17 +186,18 @@ class Capivara(pygame.sprite.Sprite):
             if self.wcount >= len(self.spritesl):
                 self.wcount = 0
             self.image = self.spritesl[int(self.wcount)]
-            self.image = pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+            self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
         #Imagens de movimentação p/ direita
         elif self.speedx > 0:
             self.wcount += 0.1
             if self.wcount >= len(self.spritesr):
                 self.wcount = 0
             self.image = self.spritesr[int(self.wcount)]
-            self.image = pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+            self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
         else:
             self.image = assets['capivara_r_img']
 
+# Desenhando as vidas
 class Vidas(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
@@ -202,8 +207,9 @@ class Vidas(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 900
         self.rect.y = 10
-        self.vidas = 3
+        self.vidas = 3 #contador de vidas
 
+    # Muda imagem das vidas
     def update(self):
         if self.vidas == 3:
             self.image = assets['vida=3']
@@ -383,7 +389,7 @@ while state != DONE:
                     if event.key == pygame.K_UP:
                         player.speedy = 10
 
-        hits = pygame.sprite.spritecollide(player, all_bolinhos, True)
+        hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             score += 1
             bolinho = Bolinho(assets)
@@ -396,7 +402,7 @@ while state != DONE:
                 all_sprites.add(bolinho)
                 all_bolinhos.add(bolinho)
 
-        hits = pygame.sprite.spritecollide(player, all_capivaras, True)
+        hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             vida.vidas -= 1
             capivara = Capivara(assets)
@@ -408,9 +414,15 @@ while state != DONE:
                 capivara = Capivara(assets)
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
+        
         if vida.vidas == 0:
             state = GAMEOVER
 
+        if score % 10 == 0:
+            if vida.vidas == 3:
+                vida.vidas = 3
+            else:
+                vida.vidas += 1
 
     # ----- Gera saídas
         window.fill((200, 200, 200))  # Preenche com a cor branca
@@ -437,6 +449,7 @@ while state != DONE:
             if event.type == pygame.QUIT:
                 state = DONE
             if event.type == pygame.KEYDOWN:
+                score = 0
                 state = CHOOSE
         window.fill(BLACK)
         window.blit(assets['init_img'], init_rect)
