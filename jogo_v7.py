@@ -7,7 +7,7 @@ pygame.mixer.init()
 WIDTH = 1100
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Jogo.v6')
+pygame.display.set_caption('Jogo.v7')
 pygame.mixer.music.set_volume(0.4)
 
 BLACK = (0, 0, 0)
@@ -323,11 +323,8 @@ while state != DONE:
             if event.type == pygame.QUIT:
                 state = DONE
             if event.type == pygame.KEYDOWN:
-                # while init_count < 4:
-                #     init_count += 0.1
-                #     assets['init_img'] = init_anim[int(init_count)]
-                #     window.blit(assets['init_img'], init_rect)
-                state = CHOOSE
+                if event.key == pygame.K_SPACE:
+                    state = CHOOSE
 
         window.fill(BLACK)
         window.blit(assets['init_img'], init_rect)
@@ -369,11 +366,12 @@ while state != DONE:
             if event.type == pygame.QUIT:
                 state = DONE
             if event.type == pygame.KEYDOWN:
-                state = PLAYING
+                if event.key == pygame.K_SPACE:
+                    state = PLAYING
 
         window.fill(BLACK)
         window.blit(assets['instructions_img'], init_rect)
-
+        player.speedx = 0
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
@@ -412,7 +410,33 @@ while state != DONE:
                         player.image = assets['player_r_img'] 
                     if event.key == pygame.K_UP:
                         player.speedy = 10
+
+        hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
+        if len(hits) == 1:
+            assets['eat_sound'].play()
+            score += 1
+            bolinho = Bolinho(assets)
+            all_sprites.add(bolinho)
+            all_bolinhos.add(bolinho)
+            if score % 10 == 0 and score != 0:
+                if vida.vidas == 3:
+                    vida.vidas = 3
+                else:
+                    vida.vidas += 1
+        elif len(hits) == 2:
+            score += 2
+            for i in range(2):
+                assets['eat_sound'].play()
+                bolinho = Bolinho(assets)
+                all_sprites.add(bolinho)
+                all_bolinhos.add(bolinho)
+            if score % 10 == 0 and score != 0:
+                if vida.vidas == 3:
+                    vida.vidas = 3
+                else:
+                    vida.vidas += 1
                         
+
         hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             vida.vidas -= 1
@@ -426,30 +450,11 @@ while state != DONE:
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
 
-        hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
-        if len(hits) == 1:
-            assets['eat_sound'].play()
-            score += 1
-            bolinho = Bolinho(assets)
-            all_sprites.add(bolinho)
-            all_bolinhos.add(bolinho)
-        elif len(hits) == 2:
-            score += 2
-            for i in range(2):
-                assets['eat_sound'].play()
-                bolinho = Bolinho(assets)
-                all_sprites.add(bolinho)
-                all_bolinhos.add(bolinho)
 
-        
         if vida.vidas == 0:
             state = GAMEOVER
 
-        if score % 10 == 0:
-            if vida.vidas == 3:
-                vida.vidas = 3
-            else:
-                vida.vidas += 1
+
 
     # ----- Gera saídas
         window.fill((200, 200, 200))  # Preenche com a cor branca
@@ -476,8 +481,9 @@ while state != DONE:
             if event.type == pygame.QUIT:
                 state = DONE
             if event.type == pygame.KEYDOWN:
-                score = 0
-                state = CHOOSE
+                if event.key == pygame.K_SPACE:
+                    score = 0
+                    state = CHOOSE
         window.fill(BLACK)
         window.blit(assets['telafim_img'], init_rect)
         pygame.display.flip()
