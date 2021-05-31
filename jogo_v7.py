@@ -2,10 +2,13 @@ import pygame
 import random
 
 pygame.init()
+pygame.mixer.init()
+
 WIDTH = 1100
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Jogo.v6')
+pygame.mixer.music.set_volume(0.4)
 
 BLACK = (0, 0, 0)
 
@@ -46,6 +49,7 @@ assets['vida=2'] = pygame.image.load('assets/img/vida2.png').convert_alpha()
 assets['vida=2'] = pygame.transform.scale(assets['vida=2'], (200, 200))
 assets['vida=1'] = pygame.image.load('assets/img/vida3.png').convert_alpha()
 assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
+assets['eat_sound'] = pygame.mixer.Sound('assets/snd/eat_snd.mp3')
 clock = pygame.time.Clock()
 FPS = 60
 
@@ -424,6 +428,7 @@ while state != DONE:
 
         hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
+            assets['eat_sound'].play()
             score += 1
             bolinho = Bolinho(assets)
             all_sprites.add(bolinho)
@@ -431,6 +436,7 @@ while state != DONE:
         elif len(hits) == 2:
             score += 2
             for i in range(2):
+                assets['eat_sound'].play()
                 bolinho = Bolinho(assets)
                 all_sprites.add(bolinho)
                 all_bolinhos.add(bolinho)
