@@ -25,6 +25,8 @@ assets['charchoose_img'] = pygame.image.load('assets/img/char_choose.png')
 assets['charchoose_img'] = pygame.transform.scale(assets['charchoose_img'], (WIDTH, HEIGHT))
 assets['init_img'] = pygame.image.load('assets/img/init_img.png')
 assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
+assets['instructions_img'] = pygame.image.load('assets/img/instructions_img.png')
+assets['instructions_img'] = pygame.transform.scale(assets['instructions_img'], (WIDTH, HEIGHT))
 assets['player_r_img'] = pygame.image.load('assets/img/guitas_r.png').convert_alpha()
 assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_alpha()
@@ -33,15 +35,9 @@ assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').conv
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
 assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
 assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha()
-
-assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha()
-assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-
 assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
 assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha()
 assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
-
 assets['vida=3'] = pygame.image.load('assets/img/vida1.png').convert_alpha()
 assets['vida=3'] = pygame.transform.scale(assets['vida=3'], (200, 200))
 assets['vida=2'] = pygame.image.load('assets/img/vida2.png').convert_alpha()
@@ -302,9 +298,10 @@ game = True
 
 DONE = 0
 INIT = 1
-CHOOSE = 2
-PLAYING = 3
-GAMEOVER = 4
+INSTRUCTIONS = 2
+CHOOSE = 3
+PLAYING = 4
+GAMEOVER = 5
 
 init_rect = assets['background'].get_rect()
 init_count = 0
@@ -343,18 +340,33 @@ while state != DONE:
                 if event.key == pygame.K_a:
                     char_choose = 1
                     char_change(char_choose)
-                    state = PLAYING
+                    state = INSTRUCTIONS
                 if event.key == pygame.K_s:
                     char_choose = 2
                     char_change(char_choose)
-                    state = PLAYING
+                    state = INSTRUCTIONS
                 if event.key == pygame.K_d:
                     char_choose = 3
                     char_change(char_choose)
-                    state = PLAYING
+                    state = INSTRUCTIONS
 
         window.fill(BLACK)
         window.blit(assets['charchoose_img'], init_rect)
+
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+
+    if state == INSTRUCTIONS:
+            # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                state = PLAYING
+
+        window.fill(BLACK)
+        window.blit(assets['instructions_img'], init_rect)
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
@@ -394,6 +406,19 @@ while state != DONE:
                         player.image = assets['player_r_img'] 
                     if event.key == pygame.K_UP:
                         player.speedy = 10
+                        
+        hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
+        if len(hits) == 1:
+            vida.vidas -= 1
+            capivara = Capivara(assets)
+            all_sprites.add(capivara)
+            all_capivaras.add(capivara)
+        elif len(hits) == 2:
+            vida.vidas -= 1
+            for i in range(2):
+                capivara = Capivara(assets)
+                all_sprites.add(capivara)
+                all_capivaras.add(capivara)
 
         hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
@@ -408,18 +433,6 @@ while state != DONE:
                 all_sprites.add(bolinho)
                 all_bolinhos.add(bolinho)
 
-        hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
-        if len(hits) == 1:
-            vida.vidas -= 1
-            capivara = Capivara(assets)
-            all_sprites.add(capivara)
-            all_capivaras.add(capivara)
-        elif len(hits) == 2:
-            vida.vidas -= 1
-            for i in range(2):
-                capivara = Capivara(assets)
-                all_sprites.add(capivara)
-                all_capivaras.add(capivara)
         
         if vida.vidas == 0:
             state = GAMEOVER
