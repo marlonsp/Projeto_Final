@@ -53,7 +53,7 @@ assets['vida=1'] = pygame.image.load('assets/img/vida3.png').convert_alpha()
 assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
 assets['eat_sound'] = pygame.mixer.Sound('assets/snd/eat_snd.mp3')
 pygame.mixer.music.load('assets/snd/prnp_sndtrack.mp3')
-pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.set_volume(0.2)
 clock = pygame.time.Clock()
 FPS = 60
 
@@ -339,8 +339,6 @@ init_count = 0
 state = INIT
 
 pygame.mixer.music.play(loops=-1)
-while game:
-    clock.tick(FPS)
 
 while state != DONE:
     clock.tick(FPS)
