@@ -486,5 +486,11 @@ while state != DONE:
                     state = CHOOSE
         window.fill(BLACK)
         window.blit(assets['telafim_img'], init_rect)
+
+        text_surface = assets['score_font'].render("Pontos obtidos:{:01d}".format(score), True, (0, 200, 255))
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (WIDTH / 2,  50)
+        window.blit(text_surface, text_rect)
+
         pygame.display.flip()
 pygame.quit()
