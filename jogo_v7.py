@@ -38,6 +38,8 @@ assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_al
 assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
 assets['bolinho_img'] = pygame.image.load('assets/img/bolinho_caipira.png').convert_alpha()
 assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
+assets['refri_img'] = pygame.image.load('assets/img/refri.png').convert_alpha()
+assets['refri_img'] = pygame.transform.scale(assets['refri_img'], (60, 60))
 assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
 assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha()
 assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
@@ -132,6 +134,21 @@ class Bolinho(pygame.sprite.Sprite):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
         self.image = assets['bolinho_img']
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(50, WIDTH-50)
+        self.rect.y = random.randint(250, 500)
+    
+    def update(self):
+        self.rect.x += 0
+        self.rect.y += 0
+
+#Classes dos Refri
+class Refri(pygame.sprite.Sprite):
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        self.image = assets['refri_img']
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(50, WIDTH-50)
@@ -273,15 +290,20 @@ def char_change(char_choose):
 all_sprites = pygame.sprite.Group()
 all_bolinhos = pygame.sprite.Group()
 all_capivaras = pygame.sprite.Group()
+all_refri = pygame.sprite.Group()
 
 groups = {}
 groups['all_bolinhos'] = all_bolinhos
 groups['all_capivaras'] = all_capivaras
+groups['all_refris'] = all_refri
 
 player = Player(assets)
 bolinho = Bolinho(assets)
 capivara = Capivara(assets)
 vida = Vidas(assets)
+refri = Refri(assets)
+
+all_refri.add(refri)
 
 for i in range(2):
     bolinho = Bolinho(assets)
@@ -293,6 +315,7 @@ for i in range(2):
     all_sprites.add(capivara)
     all_capivaras.add(capivara)
 
+all_sprites.add(refri)
 all_sprites.add(player)
 all_sprites.add(vida)
 
@@ -419,10 +442,9 @@ while state != DONE:
             all_sprites.add(bolinho)
             all_bolinhos.add(bolinho)
             if score % 10 == 0 and score != 0:
-                if vida.vidas == 3:
-                    vida.vidas = 3
-                else:
-                    vida.vidas += 1
+                refri = Refri(assets)
+                all_sprites.add(refri)
+                all_refri.add(refri)
         elif len(hits) == 2:
             score += 2
             for i in range(2):
@@ -435,7 +457,6 @@ while state != DONE:
                     vida.vidas = 3
                 else:
                     vida.vidas += 1
-                        
 
         hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
@@ -450,6 +471,12 @@ while state != DONE:
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
 
+        hits = pygame.sprite.spritecollide(player, all_refri, True, pygame.sprite.collide_mask)
+        if len(hits) == 1:
+            if vida.vidas == 3:
+                vida.vidas = 3
+            else:
+                vida.vidas += 1
 
         if vida.vidas == 0:
             state = GAMEOVER
