@@ -1,5 +1,6 @@
 # Projeto_Final
-Jogo feito através do Pygame para o projeto final
+Jogo feito através do Pygame para o projeto final:
+
 SanjaCity Adventure
 Jogo desenvolvido por Fernanda Oliveira, Guilherme Martins e Marlon Pereira, através do Python 3, utilizando os recursos da biblioteca PyGame.
 
