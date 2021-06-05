@@ -182,10 +182,10 @@ class Capivara(pygame.sprite.Sprite):
         self.start_or_end = random.randint(1,2)
         if self.start_or_end == 1:
             self.rect.x = 0 - CAPIVARA_WIDTH
-            self.speedx = random.randint(4, 8)
+            self.speedx = 5
         else:
             self.rect.x = WIDTH + CAPIVARA_WIDTH
-            self.speedx = random.randint(-8, -4)
+            self.speedx = -5
         self.rect.y = 420
         self.speedy = 0
         self.wcount = 0 #Contagem p/ os frames do movimento
@@ -199,19 +199,19 @@ class Capivara(pygame.sprite.Sprite):
                 self.start_or_end = random.randint(1,2)
                 if self.start_or_end == 1:
                     self.rect.x = 0 - CAPIVARA_WIDTH
-                    self.speedx = random.randint(4, 8)
+                    self.speedx = 5
                 else:
                     self.rect.x = WIDTH + CAPIVARA_WIDTH
-                    self.speedx = random.randint(-8, -4)
+                    self.speedx = -5
         else:
             if self.rect.right < 0:
                 self.start_or_end = random.randint(1,2)
                 if self.start_or_end == 1:
                     self.rect.x = 0 - CAPIVARA_WIDTH
-                    self.speedx = random.randint(4, 8)
+                    self.speedx = 5
                 else:
                     self.rect.x = WIDTH + CAPIVARA_WIDTH
-                    self.speedx = random.randint(-8, -4)
+                    self.speedx = -5
         #Imagens de movimentação p/ esquerda
         if self.speedx < 0:
             self.wcount += 0.1
@@ -369,20 +369,20 @@ all_sprites = pygame.sprite.Group()
 all_bolinhos = pygame.sprite.Group()
 all_capivaras = pygame.sprite.Group()
 all_refri = pygame.sprite.Group()
-all_capivarasmoto = pygame.sprit.Group()
+all_capivarasmoto = pygame.sprite.Group()
 
 groups = {}
 groups['all_bolinhos'] = all_bolinhos
 groups['all_capivaras'] = all_capivaras
 groups['all_refris'] = all_refri
+groups['all_capivarasmoto'] = all_capivarasmoto
 
 player = Player(assets)
 bolinho = Bolinho(assets)
 capivara = Capivara(assets)
 vida = Vidas(assets)
-refri = Refri(assets)
+capivaramoto = CapivaraMoto(assets)
 
-all_refri.add(refri)
 
 for i in range(2):
     bolinho = Bolinho(assets)
@@ -394,7 +394,11 @@ for i in range(2):
     all_sprites.add(capivara)
     all_capivaras.add(capivara)
 
-all_sprites.add(refri)
+# for i in range(2):
+#     capivaramoto = CapivaraMoto(assets)
+#     all_sprites.add(capivaramoto)
+#     all_capivarasmoto.add(capivaramoto)
+
 all_sprites.add(player)
 all_sprites.add(vida)
 
@@ -561,8 +565,6 @@ while state != DONE:
 
         if vida.vidas == 0:
             state = GAMEOVER
-
-
 
     # ----- Gera saídas
         window.fill((200, 200, 200))  # Preenche com a cor branca
