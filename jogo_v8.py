@@ -19,7 +19,10 @@ PLAYER_WIDTH = 120
 PLAYER_HEIGHT = 120
 
 CAPIVARA_WIDTH = 120
-CAPIVARA_HEIGHT = 80
+CAPIVARA_HEIGHT = 120
+
+CAPIVARAMOTO_WIDTH = 200
+CAPIVARAMOTO_HEIGHT = 200
 
 assets = {}
 assets['background'] = pygame.image.load('assets/img/fundo1.png')
@@ -45,6 +48,8 @@ assets['capivara_r_img'] = pygame.image.load('assets/img/capivara_move_r-1.png')
 assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
 assets['capivara_l_img'] = pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha()
 assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+assets['capivaramoto_r_img'] = pygame.image.load('assets/img/capivara_moto_r-1.png').convert_alpha()
+assets['capivaramoto_r_img'] = pygame.transform.scale(assets['capivaramoto_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
 assets['vida=3'] = pygame.image.load('assets/img/vida1.png').convert_alpha()
 assets['vida=3'] = pygame.transform.scale(assets['vida=3'], (200, 200))
 assets['vida=2'] = pygame.image.load('assets/img/vida2.png').convert_alpha()
@@ -112,7 +117,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
         if self.jump == True:
-            if self.rect.y <= 250:
+            if self.rect.y <= 200:
                 self.jump = False
             self.rect.y -=20
  
@@ -176,36 +181,36 @@ class Capivara(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.start_or_end = random.randint(1,2)
         if self.start_or_end == 1:
-            self.rect.x = 0 - PLAYER_WIDTH
+            self.rect.x = 0 - CAPIVARA_WIDTH
             self.speedx = random.randint(4, 8)
         else:
-            self.rect.x = WIDTH + PLAYER_WIDTH
+            self.rect.x = WIDTH + CAPIVARA_WIDTH
             self.speedx = random.randint(-8, -4)
-        self.rect.y = 450
+        self.rect.y = 420
         self.speedy = 0
         self.wcount = 0 #Contagem p/ os frames do movimento
 
     def update(self):
-        # Atualizando a posição do meteoro
+        # Atualizando a posição da capivara
         self.rect.x += self.speedx
         # novas posições e velocidades
         if self.start_or_end == 1:
             if self.rect.left > WIDTH:
                 self.start_or_end = random.randint(1,2)
                 if self.start_or_end == 1:
-                    self.rect.x = 0 - PLAYER_WIDTH
+                    self.rect.x = 0 - CAPIVARA_WIDTH
                     self.speedx = random.randint(4, 8)
                 else:
-                    self.rect.x = WIDTH + PLAYER_WIDTH
+                    self.rect.x = WIDTH + CAPIVARA_WIDTH
                     self.speedx = random.randint(-8, -4)
         else:
             if self.rect.right < 0:
                 self.start_or_end = random.randint(1,2)
                 if self.start_or_end == 1:
-                    self.rect.x = 0 - PLAYER_WIDTH
+                    self.rect.x = 0 - CAPIVARA_WIDTH
                     self.speedx = random.randint(4, 8)
                 else:
-                    self.rect.x = WIDTH + PLAYER_WIDTH
+                    self.rect.x = WIDTH + CAPIVARA_WIDTH
                     self.speedx = random.randint(-8, -4)
         #Imagens de movimentação p/ esquerda
         if self.speedx < 0:
@@ -214,6 +219,7 @@ class Capivara(pygame.sprite.Sprite):
                 self.wcount = 0
             self.image = self.spritesl[int(self.wcount)]
             self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+            self.mask = pygame.mask.from_surface(self.image)
         #Imagens de movimentação p/ direita
         elif self.speedx > 0:
             self.wcount += 0.1
@@ -221,8 +227,78 @@ class Capivara(pygame.sprite.Sprite):
                 self.wcount = 0
             self.image = self.spritesr[int(self.wcount)]
             self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+            self.mask = pygame.mask.from_surface(self.image)
         else:
             self.image = assets['capivara_r_img']
+            self.mask = pygame.mask.from_surface(self.image)
+
+class CapivaraMoto(pygame.sprite.Sprite):
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.spritesl = []
+        self.spritesr = []
+        self.spritesr.append(pygame.image.load('assets/img/capivara_moto_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load('assets/img/capivara_moto_r-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/capivara_moto_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load('assets/img/capivara_moto_l-2.png').convert_alpha())
+        self.image = assets['capivaramoto_r_img']
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.start_or_end = random.randint(1,2)
+        if self.start_or_end == 1:
+            self.rect.x = 0 - CAPIVARAMOTO_WIDTH
+            self.speedx = random.randint(4, 8)
+        else:
+            self.rect.x = WIDTH + CAPIVARAMOTO_WIDTH
+            self.speedx = random.randint(-8, -4)
+        self.rect.y = 420
+        self.speedy = 0
+        self.wcount = 0 #Contagem p/ os frames do movimento
+
+    def update(self):
+        # Atualizando a posição da capivara de moto
+        self.rect.x += self.speedx
+        # novas posições e velocidades
+        if self.start_or_end == 1:
+            if self.rect.left > WIDTH:
+                self.start_or_end = random.randint(1,2)
+                if self.start_or_end == 1:
+                    self.rect.x = 0 - CAPIVARAMOTO_WIDTH
+                    self.speedx = random.randint(4, 8)
+                else:
+                    self.rect.x = WIDTH + CAPIVARAMOTO_WIDTH
+                    self.speedx = random.randint(-8, -4)
+        else:
+            if self.rect.right < 0:
+                self.start_or_end = random.randint(1,2)
+                if self.start_or_end == 1:
+                    self.rect.x = 0 - CAPIVARAMOTO_WIDTH
+                    self.speedx = random.randint(4, 8)
+                else:
+                    self.rect.x = WIDTH + CAPIVARAMOTO_WIDTH
+                    self.speedx = random.randint(-8, -4)
+        #Imagens de movimentação p/ esquerda
+        if self.speedx < 0:
+            self.wcount += 0.1
+            if self.wcount >= len(self.spritesl):
+                self.wcount = 0
+            self.image = self.spritesl[int(self.wcount)]
+            self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+            self.mask = pygame.mask.from_surface(self.image)
+        #Imagens de movimentação p/ direita
+        elif self.speedx > 0:
+            self.wcount += 0.1
+            if self.wcount >= len(self.spritesr):
+                self.wcount = 0
+            self.image = self.spritesr[int(self.wcount)]
+            self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+            self.mask = pygame.mask.from_surface(self.image)
+        else:
+            self.image = assets['capivara_r_img']
+            self.mask = pygame.mask.from_surface(self.image)
+
 
 # Desenhando as vidas
 class Vidas(pygame.sprite.Sprite):
@@ -293,6 +369,7 @@ all_sprites = pygame.sprite.Group()
 all_bolinhos = pygame.sprite.Group()
 all_capivaras = pygame.sprite.Group()
 all_refri = pygame.sprite.Group()
+all_capivarasmoto = pygame.sprit.Group()
 
 groups = {}
 groups['all_bolinhos'] = all_bolinhos
