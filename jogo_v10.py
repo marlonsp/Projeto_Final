@@ -7,13 +7,13 @@ pygame.mixer.init()
 WIDTH = 1100
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Jogo.v10')
+pygame.display.set_caption('SanjaCity Adventure')
 pygame.mixer.music.set_volume(0.4)
 
 BLACK = (0, 0, 0)
 
-teste = pygame.image.load('assets/img/player_test.png')
-pygame.display.set_icon(teste)
+bandeira = pygame.image.load('assets/img/bandeira.png')
+pygame.display.set_icon(bandeira)
 # ----- Inicia assets
 PLAYER_WIDTH = 120
 PLAYER_HEIGHT = 120
@@ -654,7 +654,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 50:
+        if score == 10:
             for i in range(2):
                 capivara2 = Capivara2(assets)
                 all_sprites.add(capivara2)
@@ -782,7 +782,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 100:
+        if score == 20:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
@@ -906,7 +906,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 150:
+        if score == 30:
             state = GAMEWON
 
         # ----- Gera saídas
@@ -987,5 +987,4 @@ while state != DONE:
         window.blit(text_surface, text_rect)
 
         pygame.display.flip()
-        
 pygame.quit()
