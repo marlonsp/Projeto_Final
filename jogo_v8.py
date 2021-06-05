@@ -57,6 +57,9 @@ assets['vida=2'] = pygame.transform.scale(assets['vida=2'], (200, 200))
 assets['vida=1'] = pygame.image.load('assets/img/vida3.png').convert_alpha()
 assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
 assets['eat_sound'] = pygame.mixer.Sound('assets/snd/eat_snd.mp3')
+assets['hit_sound'] = pygame.mixer.Sound('assets/snd/hit.wav')
+assets['drink_sound'] = pygame.mixer.Sound('assets/snd/drink_snd.wav')
+assets['sax_sound'] = pygame.mixer.Sound('assets/snd/gameover.mp3')
 pygame.mixer.music.load('assets/snd/prnp_sndtrack.mp3')
 pygame.mixer.music.set_volume(0.2)
 clock = pygame.time.Clock()
@@ -441,6 +444,7 @@ while state != DONE:
         pygame.display.flip()
 
     if state == CHOOSE:
+        pygame.mixer.music.set_volume(0.2)
             # ----- Trata eventos
         for event in pygame.event.get():
             # ----- Verifica consequências
@@ -545,6 +549,7 @@ while state != DONE:
 
         hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
+            assets['hit_sound'].play()
             vida.vidas -= 1
             capivara = Capivara(assets)
             all_sprites.add(capivara)
@@ -552,25 +557,29 @@ while state != DONE:
         elif len(hits) == 2:
             vida.vidas -= 1
             for i in range(2):
+                assets['hit_sound'].play()
                 capivara = Capivara(assets)
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
 
         hits = pygame.sprite.spritecollide(player, all_refri, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
+            assets['drink_sound'].play()
             if vida.vidas == 3:
                 vida.vidas = 3
             else:
                 vida.vidas += 1
 
         if vida.vidas == 0:
+            pygame.mixer.music.set_volume(0.0)
+            assets['sax_sound'].play()
             state = GAMEOVER
 
     # ----- Gera saídas
         window.fill((200, 200, 200))  # Preenche com a cor branca
         window.blit(assets['background'],(0,0))
 
-        text_surface = assets['score_font'].render("Pontos:{:01d}".format(score), True, (0, 255, 255))
+        text_surface = assets['score_font'].render("Pontos:{:01d}".format(score), True, (0, 0, 255))
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2,  10)
 
