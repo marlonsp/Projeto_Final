@@ -579,7 +579,7 @@ while state != DONE:
         window.fill((200, 200, 200))  # Preenche com a cor branca
         window.blit(assets['background'],(0,0))
 
-        text_surface = assets['score_font'].render("Pontos:{:01d}".format(score), True, (0, 255, 255))
+        text_surface = assets['score_font'].render("Pontos:{:01d}".format(score), True, (0, 0, 255))
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2,  10)
 
