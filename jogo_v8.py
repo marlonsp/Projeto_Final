@@ -58,6 +58,8 @@ assets['vida=1'] = pygame.image.load('assets/img/vida3.png').convert_alpha()
 assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
 assets['eat_sound'] = pygame.mixer.Sound('assets/snd/eat_snd.mp3')
 assets['hit_sound'] = pygame.mixer.Sound('assets/snd/hit.wav')
+assets['drink_sound'] = pygame.mixer.Sound('assets/snd/drink_snd.wav')
+assets['sax_sound'] = pygame.mixer.Sound('assets/snd/gameover.mp3')
 pygame.mixer.music.load('assets/snd/prnp_sndtrack.mp3')
 pygame.mixer.music.set_volume(0.2)
 clock = pygame.time.Clock()
@@ -442,6 +444,7 @@ while state != DONE:
         pygame.display.flip()
 
     if state == CHOOSE:
+        pygame.mixer.music.set_volume(0.2)
             # ----- Trata eventos
         for event in pygame.event.get():
             # ----- Verifica consequências
@@ -561,12 +564,15 @@ while state != DONE:
 
         hits = pygame.sprite.spritecollide(player, all_refri, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
+            assets['drink_sound'].play()
             if vida.vidas == 3:
                 vida.vidas = 3
             else:
                 vida.vidas += 1
 
         if vida.vidas == 0:
+            pygame.mixer.music.set_volume(0.0)
+            assets['sax_sound'].play()
             state = GAMEOVER
 
     # ----- Gera saídas
