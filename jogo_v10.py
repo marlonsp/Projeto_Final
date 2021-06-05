@@ -37,6 +37,8 @@ assets['init_img'] = pygame.image.load('assets/img/init_img.png')
 assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
 assets['telafim_img'] = pygame.image.load('assets/img/telafim_img.png')
 assets['telafim_img'] = pygame.transform.scale(assets['telafim_img'], (WIDTH, HEIGHT))
+assets['telawin_img'] = pygame.image.load('assets/img/vitoria.png')
+assets['telawin_img'] = pygame.transform.scale(assets['telawin_img'], (WIDTH, HEIGHT))
 assets['instructions_img'] = pygame.image.load('assets/img/instructions_img.png')
 assets['instructions_img'] = pygame.transform.scale(assets['instructions_img'], (WIDTH, HEIGHT))
 assets['instructions2_img'] = pygame.image.load('assets/img/fase2start.png')
@@ -652,7 +654,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 50:
+        if score == 10:
             for i in range(2):
                 capivara2 = Capivara2(assets)
                 all_sprites.add(capivara2)
@@ -780,7 +782,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 100:
+        if score == 20:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
@@ -904,6 +906,8 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
+        if score == 30:
+            state = GAMEWON
 
         # ----- Gera saídas
         window.fill((200, 200, 200))  # Preenche com a cor branca
@@ -920,7 +924,7 @@ while state != DONE:
         # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
 
-    elif state == GAMEOVER:
+    if state == GAMEOVER:
         vida.vidas = 3
         player.speedx = 0
         player.wleft = False
@@ -944,6 +948,38 @@ while state != DONE:
                     state = CHOOSE
         window.fill(BLACK)
         window.blit(assets['telafim_img'], init_rect)
+
+        text_surface = assets['score_font'].render("Pontos obtidos:{:01d}".format(score), True, (0, 200, 255))
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (WIDTH / 2,  50)
+        window.blit(text_surface, text_rect)
+
+        pygame.display.flip()
+
+    if state == GAMEWON:
+        vida.vidas = 3
+        player.speedx = 0
+        player.wleft = False
+        player.wright = False
+            # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    score = 0
+                    vida.vidas = 3
+                    all_sprites.remove(all_capivaras)
+                    all_sprites.remove(all_capivaras2)
+                    all_sprites.remove(all_capivarasmoto)
+                    for i in range(2):
+                        capiva = Capivara(assets)
+                        all_sprites.add(capivara)
+                        all_capivaras.add(capivara)
+                    state = CHOOSE
+        window.fill(BLACK)
+        window.blit(assets['telawin_img'], init_rect)
 
         text_surface = assets['score_font'].render("Pontos obtidos:{:01d}".format(score), True, (0, 200, 255))
         text_rect = text_surface.get_rect()
