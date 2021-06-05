@@ -57,6 +57,7 @@ assets['vida=2'] = pygame.transform.scale(assets['vida=2'], (200, 200))
 assets['vida=1'] = pygame.image.load('assets/img/vida3.png').convert_alpha()
 assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
 assets['eat_sound'] = pygame.mixer.Sound('assets/snd/eat_snd.mp3')
+assets['hit_sound'] = pygame.mixer.Sound('assets/snd/hit.wav')
 pygame.mixer.music.load('assets/snd/prnp_sndtrack.mp3')
 pygame.mixer.music.set_volume(0.2)
 clock = pygame.time.Clock()
@@ -545,6 +546,7 @@ while state != DONE:
 
         hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
+            assets['hit_sound'].play()
             vida.vidas -= 1
             capivara = Capivara(assets)
             all_sprites.add(capivara)
@@ -552,6 +554,7 @@ while state != DONE:
         elif len(hits) == 2:
             vida.vidas -= 1
             for i in range(2):
+                assets['hit_sound'].play()
                 capivara = Capivara(assets)
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
