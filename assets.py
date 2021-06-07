@@ -1,0 +1,60 @@
+import pygame
+import os
+from config import WIDTH, HEIGHT, PLAYER_HEIGHT, PLAYER_WIDTH, CAPIVARA_HEIGHT, CAPIVARAMOTO_WIDTH
+    
+BACKGROUND1 = 'background1'
+BACKGROUND2 = 'background2'
+BACKGROUND3 = 'background3'
+CHARCHOOSE_IMG = 'charchoose_img'
+
+def load_assets():
+    assets = {}
+    assets[BACKGROUND1] = pygame.image.load(os.path.join(IMG_DIR, 'fundo1.png'))
+    assets[BACKGROUND1] = pygame.transform.scale(assets['background1'], (WIDTH, HEIGHT))
+    assets[BACKGROUND2] = pygame.image.load(os.path.join(IMG_DIR, 'fundo2.png'))
+    assets[BACKGROUND2] = pygame.transform.scale(assets['background2'], (WIDTH, HEIGHT))
+    assets[BACKGROUND3] = pygame.image.load(os.path.join(IMG_DIR, 'fundo3.png'))
+    assets[BACKGROUND3] = pygame.transform.scale(assets['background3'], (WIDTH, HEIGHT))
+    assets[CHARCHOOSE_IMG] = pygame.image.load(os.path.join(IMG_DIR, 'char_choose.png')
+    assets[CHARCHOOSE_IMG] = pygame.transform.scale(assets['charchoose_img'], (WIDTH, HEIGHT))
+    assets['init_img'] = pygame.image.load(os.path.join(IMG_DIR, 'init_img.png')
+    assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
+    assets['telafim_img'] = pygame.image.load(os.path.join(IMG_DIR, 'telafim_img.png')
+    assets['telafim_img'] = pygame.transform.scale(assets['telafim_img'], (WIDTH, HEIGHT))
+    assets['telawin_img'] = pygame.image.load(os.path.join(IMG_DIR, 'vitoria.png')
+    assets['telawin_img'] = pygame.transform.scale(assets['telawin_img'], (WIDTH, HEIGHT))
+    assets['instructions_img'] = pygame.image.load(os.path.join(IMG_DIR, 'instructions_img.png')
+    assets['instructions_img'] = pygame.transform.scale(assets['instructions_img'], (WIDTH, HEIGHT))
+    assets['instructions2_img'] = pygame.image.load(os.path.join(IMG_DIR, 'fase2start.png')
+    assets['instructions2_img'] = pygame.transform.scale(assets['instructions2_img'], (WIDTH, HEIGHT))
+    assets['instructions3_img'] = pygame.image.load(os.path.join(IMG_DIR, 'fase3start.png')
+    assets['instructions3_img'] = pygame.transform.scale(assets['instructions3_img'], (WIDTH, HEIGHT))
+    assets['player_r_img'] = pygame.image.load(os.path.join(IMG_DIR, 'guitas_r.png').convert_alpha()
+    assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+    assets['player_l_img'] = pygame.image.load(os.path.join(IMG_DIR, 'guitas_l.png').convert_alpha()
+    assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+    assets['bolinho_img'] = pygame.image.load(os.path.join(IMG_DIR, 'bolinho_caipira.png').convert_alpha()
+    assets['bolinho_img'] = pygame.transform.scale(assets['bolinho_img'], (60, 60))
+    assets['refri_img'] = pygame.image.load(os.path.join(IMG_DIR, 'refri.png').convert_alpha()
+    assets['refri_img'] = pygame.transform.scale(assets['refri_img'], (60, 60))
+    assets["score_font"] = pygame.font.Font('assets/font/lunchds.ttf', 50)
+    assets['capivara_r_img'] = pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_r-1.png').convert_alpha()
+    assets['capivara_r_img'] = pygame.transform.scale(assets['capivara_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+    assets['capivara_l_img'] = pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_l-1.png').convert_alpha()
+    assets['capivara_l_img'] = pygame.transform.scale(assets['capivara_l_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+    assets['capivaramoto_r_img'] = pygame.image.load(os.path.join(IMG_DIR, 'capivara_moto_r-1.png').convert_alpha()
+    assets['capivaramoto_r_img'] = pygame.transform.scale(assets['capivaramoto_r_img'], (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
+    assets['vida=3'] = pygame.image.load(os.path.join(IMG_DIR, 'vida1.png').convert_alpha()
+    assets['vida=3'] = pygame.transform.scale(assets['vida=3'], (200, 200))
+    assets['vida=2'] = pygame.image.load(os.path.join(IMG_DIR, 'vida2.png').convert_alpha()
+    assets['vida=2'] = pygame.transform.scale(assets['vida=2'], (200, 200))
+    assets['vida=1'] = pygame.image.load(os.path.join(IMG_DIR, 'vida3.png').convert_alpha()
+    assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
+    assets['eat_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR, eat_snd.mp3')
+    assets['hit_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR, hit.wav')
+    pygame.mixer.Sound.set_volume(assets['hit_sound'], 0.7)
+    assets['drink_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR, drink_snd.wav')
+    pygame.mixer.Sound.set_volume(assets['drink_sound'], 0.2)
+    assets['sax_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR, gameover.mp3')
+    pygame.mixer.music.load('assets/snd/prnp_sndtrack.mp3')
+    pygame.mixer.music.set_volume(0.2)
