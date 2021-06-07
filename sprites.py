@@ -1,6 +1,9 @@
 import pygame
 import random
+import os
 from config import WIDTH, HEIGHT, PLAYER_HEIGHT, PLAYER_WIDTH, CAPIVARA_HEIGHT, CAPIVARAMOTO_WIDTH
+from assets import PLAYER_R_IMG, BOLINHO_IMG, REFRI_IMG, CAPIVARA_R_IMG, CAPIVARAMOTO_R_IMG, VIDA3, VIDA2, VIDA1
+
 #Classes do Jogador
 class Player(pygame.sprite.Sprite):
     def __init__(self, assets):
@@ -9,15 +12,15 @@ class Player(pygame.sprite.Sprite):
 
         self.spritesl = []
         self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
-        self.image = assets['player_r_img']
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_r-2.png').convert_alpha())
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_r-3.png').convert_alpha())
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_r-4.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_l-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_l-3.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'guitas_move_l-4.png').convert_alpha())
+        self.image = assets[PLAYER_R_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH / 2
@@ -49,7 +52,7 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.spritesr[int(self.wcount)]
                 self.image = pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
             else:
-                self.image = assets['player_r_img']
+                self.image = assets[PLAYER_R_IMG]
 
         # Atualizando a posição
         self.rect.x += self.speedx
@@ -77,7 +80,7 @@ class Bolinho(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.image = assets['bolinho_img']
+        self.image = assets[BOLINHO_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(50, WIDTH-50)
@@ -91,7 +94,7 @@ class Refri(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.image = assets['refri_img']
+        self.image = assets[REFRI_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(50, WIDTH-50)
@@ -107,11 +110,11 @@ class Capivara(pygame.sprite.Sprite):
 
         self.spritesl = []
         self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-2.png').convert_alpha())
-        self.image = assets['capivara_r_img']
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_r-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_l-2.png').convert_alpha())
+        self.image = assets[CAPIVARA_R_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.start_or_end = random.randint(1,2)
@@ -164,12 +167,13 @@ class Capivara(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
             self.mask = pygame.mask.from_surface(self.image)
         else:
-            self.image = assets['capivara_r_img']
+            self.image = assets[CAPIVARA_R_IMG]
             self.mask = pygame.mask.from_surface(self.image)
 
     def stop(self):
         self.rect.x = 0 - CAPIVARA_WIDTH
         self.speedx = 0
+
 class Capivara2(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
@@ -177,11 +181,11 @@ class Capivara2(pygame.sprite.Sprite):
 
         self.spritesl = []
         self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-2.png').convert_alpha())
-        self.image = assets['capivara_r_img']
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_r-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_move_l-2.png').convert_alpha())
+        self.image = assets[CAPIVARA_R_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.start_or_end = random.randint(1,2)
@@ -234,7 +238,7 @@ class Capivara2(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
             self.mask = pygame.mask.from_surface(self.image)
         else:
-            self.image = assets['capivara_r_img']
+            self.image = assets[CAPIVARA_R_IMG]
             self.mask = pygame.mask.from_surface(self.image)
 class CapivaraMoto(pygame.sprite.Sprite):
     def __init__(self, assets):
@@ -243,11 +247,11 @@ class CapivaraMoto(pygame.sprite.Sprite):
 
         self.spritesl = []
         self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/capivara_moto_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/capivara_moto_r-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_moto_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_moto_l-2.png').convert_alpha())
-        self.image = assets['capivaramoto_r_img']
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_moto_r-1.png').convert_alpha())
+        self.spritesr.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_moto_r-2.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_moto_l-1.png').convert_alpha())
+        self.spritesl.append(pygame.image.load(os.path.join(IMG_DIR, 'capivara_moto_l-2.png').convert_alpha())
+        self.image = assets[CAPIVARAMOTO_R_IMG]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.start_or_end = random.randint(1,2)
@@ -300,7 +304,7 @@ class CapivaraMoto(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, (CAPIVARAMOTO_WIDTH, CAPIVARAMOTO_HEIGHT))
             self.mask = pygame.mask.from_surface(self.image)
         else:
-            self.image = assets['capivara_r_img']
+            self.image = assets[CAPIVARA_R_IMG]
             self.mask = pygame.mask.from_surface(self.image)
 
 # Desenhando as vidas
@@ -309,7 +313,7 @@ class Vidas(pygame.sprite.Sprite):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = assets['vida=3']
+        self.image = assets[VIDA3]
         self.rect = self.image.get_rect()
         self.rect.x = 900
         self.rect.y = 10
@@ -318,9 +322,9 @@ class Vidas(pygame.sprite.Sprite):
     # Muda imagem das vidas
     def update(self):
         if self.vidas == 3:
-            self.image = assets['vida=3']
+            self.image = assets[VIDA3]
         elif self.vidas == 2:
-            self.image = assets['vida=2']
+            self.image = assets[VIDA2]
         else:
-            self.image = assets['vida=1']
+            self.image = assets[VIDA1]
 
