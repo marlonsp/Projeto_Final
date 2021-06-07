@@ -1,7 +1,7 @@
 # SanjaCity Adventure
 
 **Desenvolvedores:**
-Jogo desenvolvido por Fernanda Oliveira, Guilherme Martins e Marlon Pereira (Estudantes de Engenharia - INSPER) para o projeto final de *Dessoft*.
+Jogo desenvolvido por Fernanda de Oliveira Pereira, Guilherme dos Santos Martins e Marlon da Silva Pereira (Estudantes de Engenharia - INSPER) para o projeto final de *Dessoft*.
 
 **Programa e Biblioteca:**
 Uso da programação *Python* utilizando os recursos da biblioteca *PyGame*.
