@@ -68,7 +68,9 @@ assets['vida=1'] = pygame.image.load('assets/img/vida3.png').convert_alpha()
 assets['vida=1'] = pygame.transform.scale(assets['vida=1'], (200, 200))
 assets['eat_sound'] = pygame.mixer.Sound('assets/snd/eat_snd.mp3')
 assets['hit_sound'] = pygame.mixer.Sound('assets/snd/hit.wav')
+pygame.mixer.Sound.set_volume(assets['hit_sound'], 0.7)
 assets['drink_sound'] = pygame.mixer.Sound('assets/snd/drink_snd.wav')
+pygame.mixer.Sound.set_volume(assets['drink_sound'], 0.2)
 assets['sax_sound'] = pygame.mixer.Sound('assets/snd/gameover.mp3')
 pygame.mixer.music.load('assets/snd/prnp_sndtrack.mp3')
 pygame.mixer.music.set_volume(0.2)
@@ -643,6 +645,7 @@ while state != DONE:
 
         hits = pygame.sprite.spritecollide(player, all_refri, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
+            pygame.mixer.music.set_volume(0.2)
             assets['drink_sound'].play()
             if vida.vidas == 3:
                 vida.vidas = 3
@@ -654,7 +657,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 10:
+        if score == 50:
             for i in range(2):
                 capivara2 = Capivara2(assets)
                 all_sprites.add(capivara2)
@@ -782,7 +785,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 20:
+        if score == 100:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
@@ -906,7 +909,7 @@ while state != DONE:
             assets['sax_sound'].play()
             state = GAMEOVER
 
-        if score == 30:
+        if score == 150:
             state = GAMEWON
 
         # ----- Gera saídas
@@ -987,4 +990,5 @@ while state != DONE:
         window.blit(text_surface, text_rect)
 
         pygame.display.flip()
+        
 pygame.quit()
