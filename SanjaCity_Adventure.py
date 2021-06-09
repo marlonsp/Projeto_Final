@@ -679,7 +679,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 10:
+        if score == 20:
             for i in range(2):
                 capivara2 = Capivara2(assets)
                 all_sprites.add(capivara2)
@@ -815,7 +815,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 20:
+        if score == 40:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
@@ -947,7 +947,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para o fim de jogo foi atingida
-        if score == 30:
+        if score == 60:
             state = GAMEWON
 
         # ----- Gera saídas
@@ -1044,7 +1044,7 @@ while state != DONE:
                 if event.key == pygame.K_SPACE:
                     score = 0
                     vida.vidas = 3
-                    
+
                     all_sprites.remove(all_capivaras)
                     all_sprites.remove(all_capivaras2)
                     all_sprites.remove(all_capivarasmoto)
