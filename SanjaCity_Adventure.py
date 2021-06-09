@@ -1,9 +1,12 @@
+#Import das bibliotecas
 import pygame
 import random
 
+#iniciando o pygame
 pygame.init()
 pygame.mixer.init()
 
+#Constantes da tela, nome e imagem do jogo
 WIDTH = 1100
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -14,6 +17,7 @@ BLACK = (0, 0, 0)
 
 bandeira = pygame.image.load('assets/img/bandeira.png')
 pygame.display.set_icon(bandeira)
+
 # ----- Inicia assets
 PLAYER_WIDTH = 120
 PLAYER_HEIGHT = 120
@@ -24,6 +28,7 @@ CAPIVARA_HEIGHT = 100
 CAPIVARAMOTO_WIDTH = 220
 CAPIVARAMOTO_HEIGHT = 220
 
+#Import das imagens, sons e fonte
 assets = {}
 assets['background1'] = pygame.image.load('assets/img/fundo1.png')
 assets['background1'] = pygame.transform.scale(assets['background1'], (WIDTH, HEIGHT))
@@ -74,6 +79,8 @@ pygame.mixer.Sound.set_volume(assets['drink_sound'], 0.2)
 assets['sax_sound'] = pygame.mixer.Sound('assets/snd/gameover.mp3')
 pygame.mixer.music.load('assets/snd/prnp_sndtrack.mp3')
 pygame.mixer.music.set_volume(0.2)
+
+#Estabelendo o clock
 clock = pygame.time.Clock()
 FPS = 60
 
@@ -131,6 +138,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
 
+        #Função de pulo
         if self.jump == True:
             if self.rect.y <= 180:
                 self.jump = False
@@ -146,6 +154,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom > HEIGHT-70:
             self.rect.bottom = HEIGHT-70
 
+    #Verificador de pulo
     def jumping(self):
         self.jump = True
 
@@ -180,6 +189,7 @@ class Refri(pygame.sprite.Sprite):
         self.rect.x += 0
         self.rect.y += 0
 
+#Classes das Capivaras da fase 1
 class Capivara(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
@@ -247,10 +257,7 @@ class Capivara(pygame.sprite.Sprite):
             self.image = assets['capivara_r_img']
             self.mask = pygame.mask.from_surface(self.image)
 
-    def stop(self):
-        self.rect.x = 0 - CAPIVARA_WIDTH
-        self.speedx = 0
-
+#Classes das Capivaras da fase 2
 class Capivara2(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
@@ -318,6 +325,7 @@ class Capivara2(pygame.sprite.Sprite):
             self.image = assets['capivara_r_img']
             self.mask = pygame.mask.from_surface(self.image)
 
+#Classes das Capivaras da fase 3
 class CapivaraMoto(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
@@ -407,7 +415,7 @@ class Vidas(pygame.sprite.Sprite):
         else:
             self.image = assets['vida=1']
 
-
+#Função para escolher as sprites do jogador
 def char_change(char_choose):
     player.spritesr = []
     player.spritesl = []
@@ -450,7 +458,8 @@ def char_change(char_choose):
         assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
         assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_alpha()
         assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
-    
+
+#Criando as primeiras sprites
 all_sprites = pygame.sprite.Group()
 all_bolinhos = pygame.sprite.Group()
 all_capivaras = pygame.sprite.Group()
@@ -485,6 +494,7 @@ for i in range(2):
 all_sprites.add(player)
 all_sprites.add(vida)
 
+#Definindo constantes para o jogo
 keys_down = {}
 
 score = 0
@@ -505,13 +515,18 @@ GAMEOVER = 10
 
 init_rect = assets['background1'].get_rect()
 init_count = 0
+
+#Primeiro estado do jogo
 state = INIT
 
+#Iniciar a soudtrack
 pygame.mixer.music.play(loops=-1)
 
+#Loop principal
 while state != DONE:
     clock.tick(FPS)
 
+    #Tela inicial
     if state == INIT:
             # ----- Trata eventos
         for event in pygame.event.get():
@@ -528,6 +543,7 @@ while state != DONE:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
+    #Tela de escolha de personagem
     if state == CHOOSE:
         pygame.mixer.music.set_volume(0.2)
             # ----- Trata eventos
@@ -556,6 +572,7 @@ while state != DONE:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
+    #Tela de instruções
     if state == INSTRUCTIONS:
             # ----- Trata eventos
         for event in pygame.event.get():
@@ -572,6 +589,7 @@ while state != DONE:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
+    #Tela da 1º fase
     if state == FASE1:
         # ----- Trata eventos
         for event in pygame.event.get():
@@ -608,6 +626,7 @@ while state != DONE:
                     if event.key == pygame.K_UP:
                         player.speedy = 10
 
+        #Verifica as colisões entre o jogador e os bolinhos
         hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             assets['eat_sound'].play()
@@ -627,7 +646,7 @@ while state != DONE:
                 all_sprites.add(bolinho)
                 all_bolinhos.add(bolinho)
 
-
+        #Verifica as colisões entre o jogador e as capivaras
         hits = pygame.sprite.spritecollide(player, all_capivaras, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             assets['hit_sound'].play()
@@ -643,6 +662,7 @@ while state != DONE:
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
 
+        #Verifica as colisões entre o jogador e os refrigerantes
         hits = pygame.sprite.spritecollide(player, all_refri, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             pygame.mixer.music.set_volume(0.2)
@@ -652,11 +672,13 @@ while state != DONE:
             else:
                 vida.vidas += 1
 
+        #Verifica se as vidas não acabaram (Fim de jogo)
         if vida.vidas == 0:
             pygame.mixer.music.set_volume(0.0)
             assets['sax_sound'].play()
             state = GAMEOVER
 
+        #Verifica se a pontuação necessária para a próxima fase foi atingida
         if score == 50:
             for i in range(2):
                 capivara2 = Capivara2(assets)
@@ -669,6 +691,7 @@ while state != DONE:
         window.fill((200, 200, 200))  # Preenche com a cor branca
         window.blit(assets['background1'],(0,0))
 
+        #Apresenta a pontuação
         text_surface = assets['score_font'].render("Pontos:{:01d}".format(score), True, (0, 255, 255))
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2,  10)
@@ -680,6 +703,7 @@ while state != DONE:
         # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
 
+    #Tela de instrução para a fase 2
     if state == FASE2INST:
             # ----- Trata eventos
         for event in pygame.event.get():
@@ -702,6 +726,7 @@ while state != DONE:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
+    #Tela da 2º fase
     if state == FASE2:
         # ----- Trata eventos
         for event in pygame.event.get():
@@ -738,6 +763,7 @@ while state != DONE:
                     if event.key == pygame.K_UP:
                         player.speedy = 10
 
+        #Verifica as colisões entre o jogador e os bolinhos
         hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             assets['eat_sound'].play()
@@ -757,6 +783,7 @@ while state != DONE:
                 all_sprites.add(bolinho)
                 all_bolinhos.add(bolinho)
 
+        #Verifica as colisões entre o jogador e as capivaras
         hits = pygame.sprite.spritecollide(player, all_capivaras2, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             vida.vidas -= 1
@@ -772,6 +799,7 @@ while state != DONE:
                 all_sprites.add(capivara2)
                 all_capivaras2.add(capivara2)
 
+        #Verifica as colisões entre o jogador e os refrigerantes
         hits = pygame.sprite.spritecollide(player, all_refri, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             assets['drink_sound'].play()
@@ -779,12 +807,14 @@ while state != DONE:
                 vida.vidas = 3
             else:
                 vida.vidas += 1
-
+        
+        #Verifica se as vidas não acabaram (Fim de jogo)
         if vida.vidas == 0:
             pygame.mixer.music.set_volume(0.0)
             assets['sax_sound'].play()
             state = GAMEOVER
 
+        #Verifica se a pontuação necessária para a próxima fase foi atingida
         if score == 100:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
@@ -796,6 +826,7 @@ while state != DONE:
         window.fill((200, 200, 200))  # Preenche com a cor branca
         window.blit(assets['background2'],(0,0))
 
+        #Apresenta a pontuação
         text_surface = assets['score_font'].render("Pontos:{:01d}".format(score), True, (0, 255, 255))
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2,  10)
@@ -807,6 +838,7 @@ while state != DONE:
         # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
 
+    #Tela de instrução para a fase 3
     if state == FASE3INST:
             # ----- Trata eventos
         for event in pygame.event.get():
@@ -828,6 +860,7 @@ while state != DONE:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
+    #Tela da 3º fase
     if state == FASE3:
         # ----- Trata eventos
         for event in pygame.event.get():
@@ -864,6 +897,7 @@ while state != DONE:
                     if event.key == pygame.K_UP:
                         player.speedy = 10
 
+        #Verifica as colisões entre o jogador e os bolinhos
         hits = pygame.sprite.spritecollide(player, all_bolinhos, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             assets['eat_sound'].play()
@@ -888,6 +922,7 @@ while state != DONE:
                 else:
                     vida.vidas += 1
 
+        #Verifica as colisões entre o jogador e as capivaras
         hits = pygame.sprite.spritecollide(player, all_capivarasmoto, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             assets['hit_sound'].play()
@@ -896,6 +931,7 @@ while state != DONE:
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
 
+        #Verifica as colisões entre o jogador e os refrigerantes
         hits = pygame.sprite.spritecollide(player, all_refri, True, pygame.sprite.collide_mask)
         if len(hits) == 1:
             assets['drink_sound'].play()
@@ -904,11 +940,13 @@ while state != DONE:
             else:
                 vida.vidas += 1
 
+        #Verifica se as vidas não acabaram (Fim de jogo)
         if vida.vidas == 0:
             pygame.mixer.music.set_volume(0.0)
             assets['sax_sound'].play()
             state = GAMEOVER
 
+        #Verifica se a pontuação necessária para o fim de jogo foi atingida
         if score == 150:
             state = GAMEWON
 
@@ -927,6 +965,7 @@ while state != DONE:
         # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
 
+    #Tela de fim de jogo(Perdeu)
     if state == GAMEOVER:
         vida.vidas = 3
         player.speedx = 0
@@ -952,6 +991,7 @@ while state != DONE:
         window.fill(BLACK)
         window.blit(assets['telafim_img'], init_rect)
 
+        #Mostra os pontos obtidos
         text_surface = assets['score_font'].render("Pontos obtidos:{:01d}".format(score), True, (0, 200, 255))
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2,  50)
@@ -959,6 +999,7 @@ while state != DONE:
 
         pygame.display.flip()
 
+    #Tela de fim de jogo(Venceu)
     if state == GAMEWON:
         vida.vidas = 3
         player.speedx = 0
@@ -984,11 +1025,13 @@ while state != DONE:
         window.fill(BLACK)
         window.blit(assets['telawin_img'], init_rect)
 
+        #Mostra os pontos obtidos
         text_surface = assets['score_font'].render("Pontos obtidos:{:01d}".format(score), True, (0, 200, 255))
         text_rect = text_surface.get_rect()
         text_rect.midtop = (WIDTH / 2,  50)
         window.blit(text_surface, text_rect)
 
         pygame.display.flip()
-        
+
+#Encerra o pygame
 pygame.quit()
