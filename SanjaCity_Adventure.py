@@ -679,7 +679,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 50:
+        if score == 10:
             for i in range(2):
                 capivara2 = Capivara2(assets)
                 all_sprites.add(capivara2)
@@ -815,7 +815,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 100:
+        if score == 20:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
@@ -947,7 +947,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para o fim de jogo foi atingida
-        if score == 150:
+        if score == 30:
             state = GAMEWON
 
         # ----- Gera saídas
@@ -983,10 +983,40 @@ while state != DONE:
                     all_sprites.remove(all_capivaras)
                     all_sprites.remove(all_capivaras2)
                     all_sprites.remove(all_capivarasmoto)
+
+                    all_sprites = pygame.sprite.Group()
+                    all_bolinhos = pygame.sprite.Group()
+                    all_capivaras = pygame.sprite.Group()
+                    all_capivaras2 = pygame.sprite.Group()
+                    all_refri = pygame.sprite.Group()
+                    all_capivarasmoto = pygame.sprite.Group()
+
+                    groups = {}
+                    groups['all_bolinhos'] = all_bolinhos
+                    groups['all_capivaras'] = all_capivaras
+                    groups['all_capivaras2'] = all_capivaras2
+                    groups['all_refris'] = all_refri
+                    groups['all_capivarasmoto'] = all_capivarasmoto
+
+                    player = Player(assets)
+                    bolinho = Bolinho(assets)
+                    capivara = Capivara(assets)
+                    vida = Vidas(assets)
+                    capivaramoto = CapivaraMoto(assets)
+
                     for i in range(2):
-                        capiva = Capivara(assets)
+                        bolinho = Bolinho(assets)
+                        all_sprites.add(bolinho)
+                        all_bolinhos.add(bolinho)
+
+                    for i in range(2):
+                        capivara = Capivara(assets)
                         all_sprites.add(capivara)
                         all_capivaras.add(capivara)
+
+                    all_sprites.add(player)
+                    all_sprites.add(vida)
+
                     state = CHOOSE
         window.fill(BLACK)
         window.blit(assets['telafim_img'], init_rect)
@@ -1014,13 +1044,45 @@ while state != DONE:
                 if event.key == pygame.K_SPACE:
                     score = 0
                     vida.vidas = 3
+                    
                     all_sprites.remove(all_capivaras)
                     all_sprites.remove(all_capivaras2)
                     all_sprites.remove(all_capivarasmoto)
+
+                    all_sprites = pygame.sprite.Group()
+                    all_bolinhos = pygame.sprite.Group()
+                    all_capivaras = pygame.sprite.Group()
+                    all_capivaras2 = pygame.sprite.Group()
+                    all_refri = pygame.sprite.Group()
+                    all_capivarasmoto = pygame.sprite.Group()
+
+                    groups = {}
+                    groups['all_bolinhos'] = all_bolinhos
+                    groups['all_capivaras'] = all_capivaras
+                    groups['all_capivaras2'] = all_capivaras2
+                    groups['all_refris'] = all_refri
+                    groups['all_capivarasmoto'] = all_capivarasmoto
+
+                    player = Player(assets)
+                    bolinho = Bolinho(assets)
+                    capivara = Capivara(assets)
+                    vida = Vidas(assets)
+                    capivaramoto = CapivaraMoto(assets)
+
+
                     for i in range(2):
-                        capiva = Capivara(assets)
+                        bolinho = Bolinho(assets)
+                        all_sprites.add(bolinho)
+                        all_bolinhos.add(bolinho)
+
+                    for i in range(2):
+                        capivara = Capivara(assets)
                         all_sprites.add(capivara)
                         all_capivaras.add(capivara)
+
+                    all_sprites.add(player)
+                    all_sprites.add(vida)
+
                     state = CHOOSE
         window.fill(BLACK)
         window.blit(assets['telawin_img'], init_rect)
