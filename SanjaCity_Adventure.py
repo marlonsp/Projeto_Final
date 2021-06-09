@@ -679,7 +679,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 20:
+        if score == 50:
             for i in range(2):
                 capivara2 = Capivara2(assets)
                 all_sprites.add(capivara2)
@@ -815,7 +815,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 40:
+        if score == 100:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
@@ -947,7 +947,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para o fim de jogo foi atingida
-        if score == 60:
+        if score == 150:
             state = GAMEWON
 
         # ----- Gera saídas
