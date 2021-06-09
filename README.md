@@ -20,7 +20,7 @@ Seta para esquerda = Andar para a esquerda
 
 Seta para cima = Pular
 
-**
+**Informações extras:**
 
 - Sprites: Feitas pelos desenvolvedores do jogo.
 - Música de fundo: Watermelon Sugar [8 Bit Tribute to Harry Styles] - 8 Bit Universe (https://www.youtube.com/watch?v=i8cZJTgMmMI)
