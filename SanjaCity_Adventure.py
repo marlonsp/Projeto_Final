@@ -1,4 +1,5 @@
-#Import das bibliotecas
+ #Import das bibliotecas
+from this import d
 import pygame
 import random
 
@@ -89,17 +90,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, assets):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-
-        self.spritesl = []
-        self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
+        self.spritesl,self.spritesr = char_change(char_choose)
         self.image = assets['player_r_img']
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
@@ -111,7 +102,7 @@ class Player(pygame.sprite.Sprite):
         self.wright = False #Verificar movimento p/ direita para iniciar animação
         self.wcount = 0 #Contagem p/ os frames do movimento
         self.jump = False #Verificar se está pulando
-
+    
     def update(self):
         #imagem parado
         if self.wright and self.wleft:
@@ -189,12 +180,12 @@ class Refri(pygame.sprite.Sprite):
         self.rect.x += 0
         self.rect.y += 0
 
-#Classes das Capivaras da fase 1
+#Classes das Capivaras da fase 1 e 2
 class Capivara(pygame.sprite.Sprite):
-    def __init__(self, assets):
+    def __init__(self, assets, fase):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-
+        self.fase = fase
         self.spritesl = []
         self.spritesr = []
         self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha())
@@ -207,10 +198,16 @@ class Capivara(pygame.sprite.Sprite):
         self.start_or_end = random.randint(1,2)
         if self.start_or_end == 1:
             self.rect.x = 0 - CAPIVARA_WIDTH
-            self.speedx = 5
+            if fase == 1:
+                self.speedx = 5
+            else:
+                self.speedx = random.randint(4, 8)
         else:
             self.rect.x = WIDTH + CAPIVARA_WIDTH
-            self.speedx = -5
+            if self.fase == 1:
+                self.speedx = -5
+            else:
+                self.speedx = random.randint(-8, -4)
         self.rect.y = 440
         self.speedy = 0
         self.wcount = 0 #Contagem p/ os frames do movimento
@@ -224,87 +221,31 @@ class Capivara(pygame.sprite.Sprite):
                 self.start_or_end = random.randint(1,2)
                 if self.start_or_end == 1:
                     self.rect.x = 0 - CAPIVARA_WIDTH
-                    self.speedx = 5
+                    if self.fase == 1:
+                        self.speedx = 5
+                    else:
+                        self.speedx = random.randint(4, 8)
                 else:
                     self.rect.x = WIDTH + CAPIVARA_WIDTH
-                    self.speedx = -5
+                    if self.fase == 1:
+                        self.speedx = -5
+                    else:
+                        self.speedx = random.randint(-8, -4)
         else:
             if self.rect.right < 0:
                 self.start_or_end = random.randint(1,2)
                 if self.start_or_end == 1:
                     self.rect.x = 0 - CAPIVARA_WIDTH
-                    self.speedx = 5
+                    if self.fase == 1:
+                        self.speedx = 5
+                    else:
+                        self.speedx = random.randint(4, 8)
                 else:
                     self.rect.x = WIDTH + CAPIVARA_WIDTH
-                    self.speedx = -5
-        #Imagens de movimentação p/ esquerda
-        if self.speedx < 0:
-            self.wcount += 0.1
-            if self.wcount >= len(self.spritesl):
-                self.wcount = 0
-            self.image = self.spritesl[int(self.wcount)]
-            self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
-            self.mask = pygame.mask.from_surface(self.image)
-        #Imagens de movimentação p/ direita
-        elif self.speedx > 0:
-            self.wcount += 0.1
-            if self.wcount >= len(self.spritesr):
-                self.wcount = 0
-            self.image = self.spritesr[int(self.wcount)]
-            self.image = pygame.transform.scale(self.image, (CAPIVARA_WIDTH, CAPIVARA_HEIGHT))
-            self.mask = pygame.mask.from_surface(self.image)
-        else:
-            self.image = assets['capivara_r_img']
-            self.mask = pygame.mask.from_surface(self.image)
-
-#Classes das Capivaras da fase 2
-class Capivara2(pygame.sprite.Sprite):
-    def __init__(self, assets):
-        # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        self.spritesl = []
-        self.spritesr = []
-        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-1.png').convert_alpha())
-        self.spritesr.append(pygame.image.load('assets/img/capivara_move_r-2.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-1.png').convert_alpha())
-        self.spritesl.append(pygame.image.load('assets/img/capivara_move_l-2.png').convert_alpha())
-        self.image = assets['capivara_r_img']
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.start_or_end = random.randint(1,2)
-        if self.start_or_end == 1:
-            self.rect.x = 0 - CAPIVARA_WIDTH
-            self.speedx = random.randint(4, 8)
-        else:
-            self.rect.x = WIDTH + CAPIVARA_WIDTH
-            self.speedx = random.randint(-8, -4)
-        self.rect.y = 440
-        self.speedy = 0
-        self.wcount = 0 #Contagem p/ os frames do movimento
-
-    def update(self):
-        # Atualizando a posição da capivara
-        self.rect.x += self.speedx
-        # novas posições e velocidades
-        if self.start_or_end == 1:
-            if self.rect.left > WIDTH:
-                self.start_or_end = random.randint(1,2)
-                if self.start_or_end == 1:
-                    self.rect.x = 0 - CAPIVARA_WIDTH
-                    self.speedx = random.randint(4, 8)
-                else:
-                    self.rect.x = WIDTH + CAPIVARA_WIDTH
-                    self.speedx = random.randint(-8, -4)
-        else:
-            if self.rect.right < 0:
-                self.start_or_end = random.randint(1,2)
-                if self.start_or_end == 1:
-                    self.rect.x = 0 - CAPIVARA_WIDTH
-                    self.speedx = random.randint(4, 8)
-                else:
-                    self.rect.x = WIDTH + CAPIVARA_WIDTH
-                    self.speedx = random.randint(-8, -4)
+                    if self.fase == 1:
+                        self.speedx = -5
+                    else:
+                        self.speedx = random.randint(-8, -4)
         #Imagens de movimentação p/ esquerda
         if self.speedx < 0:
             self.wcount += 0.1
@@ -417,47 +358,48 @@ class Vidas(pygame.sprite.Sprite):
 
 #Função para escolher as sprites do jogador
 def char_change(char_choose):
-    player.spritesr = []
-    player.spritesl = []
+    spritesr = []
+    spritesl = []
     if char_choose == 1:
-        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-1.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-2.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-3.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/fer_move_r-4.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-1.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-2.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-3.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/fer_move_l-4.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/fer_move_r-1.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/fer_move_r-2.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/fer_move_r-3.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/fer_move_r-4.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/fer_move_l-1.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/fer_move_l-2.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/fer_move_l-3.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/fer_move_l-4.png').convert_alpha())
         assets['player_r_img'] = pygame.image.load('assets/img/fer_r.png').convert_alpha()
         assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
         assets['player_l_img'] = pygame.image.load('assets/img/fer_l.png').convert_alpha()
         assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
     if char_choose == 2:
-        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-1.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-2.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-3.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/Marlin_move_r-4.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-1.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-2.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-3.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/Marlin_move_l-4.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/Marlin_move_r-1.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/Marlin_move_r-2.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/Marlin_move_r-3.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/Marlin_move_r-4.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/Marlin_move_l-1.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/Marlin_move_l-2.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/Marlin_move_l-3.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/Marlin_move_l-4.png').convert_alpha())
         assets['player_r_img'] = pygame.image.load('assets/img/Marlin_r.png').convert_alpha()
         assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
         assets['player_l_img'] = pygame.image.load('assets/img/Marlin_l.png').convert_alpha()
         assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
     if char_choose == 3:
-        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
-        player.spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
-        player.spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/guitas_move_r-1.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/guitas_move_r-2.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/guitas_move_r-3.png').convert_alpha())
+        spritesr.append(pygame.image.load('assets/img/guitas_move_r-4.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/guitas_move_l-1.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/guitas_move_l-2.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/guitas_move_l-3.png').convert_alpha())
+        spritesl.append(pygame.image.load('assets/img/guitas_move_l-4.png').convert_alpha())
         assets['player_r_img'] = pygame.image.load('assets/img/guitas_r.png').convert_alpha()
         assets['player_r_img'] = pygame.transform.scale(assets['player_r_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
         assets['player_l_img'] = pygame.image.load('assets/img/guitas_l.png').convert_alpha()
         assets['player_l_img'] = pygame.transform.scale(assets['player_l_img'], (PLAYER_WIDTH, PLAYER_HEIGHT))
+    return spritesl,spritesr
 
 #Criando as primeiras sprites
 all_sprites = pygame.sprite.Group()
@@ -474,9 +416,8 @@ groups['all_capivaras2'] = all_capivaras2
 groups['all_refris'] = all_refri
 groups['all_capivarasmoto'] = all_capivarasmoto
 
-player = Player(assets)
 bolinho = Bolinho(assets)
-capivara = Capivara(assets)
+capivara = Capivara(assets,1)
 vida = Vidas(assets)
 capivaramoto = CapivaraMoto(assets)
 
@@ -487,11 +428,10 @@ for i in range(2):
     all_bolinhos.add(bolinho)
 
 for i in range(2):
-    capivara = Capivara(assets)
+    capivara = Capivara(assets,1)
     all_sprites.add(capivara)
     all_capivaras.add(capivara)
 
-all_sprites.add(player)
 all_sprites.add(vida)
 
 #Definindo constantes para o jogo
@@ -556,15 +496,15 @@ while state != DONE:
                 if event.key == pygame.K_a:
                     char_choose = 1
                     char_change(char_choose)
-                    state = INSTRUCTIONS
                 if event.key == pygame.K_s:
                     char_choose = 2
                     char_change(char_choose)
-                    state = INSTRUCTIONS
                 if event.key == pygame.K_d:
                     char_choose = 3
                     char_change(char_choose)
-                    state = INSTRUCTIONS
+                player = Player(assets)
+                all_sprites.add(player)
+                state = INSTRUCTIONS
 
         window.fill(BLACK)
         window.blit(assets['charchoose_img'], init_rect)
@@ -574,6 +514,7 @@ while state != DONE:
 
     #Tela de instruções
     if state == INSTRUCTIONS:
+
             # ----- Trata eventos
         for event in pygame.event.get():
             # ----- Verifica consequências
@@ -584,13 +525,14 @@ while state != DONE:
                     state = FASE1
 
         window.fill(BLACK)
-        window.blit(assets['instructions_img'], init_rect)
+        window.blit(assets['instructions_img'], init_rect) 
         player.speedx = 0
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
     #Tela da 1º fase
     if state == FASE1:
+
         # ----- Trata eventos
         for event in pygame.event.get():
             # ----- Verifica consequências
@@ -651,14 +593,14 @@ while state != DONE:
         if len(hits) == 1:
             assets['hit_sound'].play()
             vida.vidas -= 1
-            capivara = Capivara(assets)
+            capivara = Capivara(assets,1)
             all_sprites.add(capivara)
             all_capivaras.add(capivara)
         elif len(hits) == 2:
             vida.vidas -= 1
             assets['hit_sound'].play()
             for i in range(2):
-                capivara = Capivara(assets)
+                capivara = Capivara(assets,1)
                 all_sprites.add(capivara)
                 all_capivaras.add(capivara)
 
@@ -676,12 +618,13 @@ while state != DONE:
         if vida.vidas == 0:
             pygame.mixer.music.set_volume(0.0)
             assets['sax_sound'].play()
+            all_sprites.remove(player)
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 20:
+        if score == 10:
             for i in range(2):
-                capivara2 = Capivara2(assets)
+                capivara2 = Capivara(assets,2)
                 all_sprites.add(capivara2)
                 all_capivaras2.add(capivara2)
             all_sprites.remove(all_capivaras)
@@ -788,14 +731,14 @@ while state != DONE:
         if len(hits) == 1:
             vida.vidas -= 1
             assets['hit_sound'].play()
-            capivara2 = Capivara2(assets)
+            capivara2 = Capivara(assets,2)
             all_sprites.add(capivara2)
             all_capivaras2.add(capivara2)
         elif len(hits) == 2:
             vida.vidas -= 1
             assets['hit_sound'].play()
             for i in range(2):
-                capivara2 = Capivara2(assets)
+                capivara2 = Capivara(assets,2)
                 all_sprites.add(capivara2)
                 all_capivaras2.add(capivara2)
 
@@ -815,7 +758,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para a próxima fase foi atingida
-        if score == 40:
+        if score == 100:
             capivaramoto = CapivaraMoto(assets)
             all_sprites.add(capivaramoto)
             all_capivarasmoto.add(capivaramoto)
@@ -947,7 +890,7 @@ while state != DONE:
             state = GAMEOVER
 
         #Verifica se a pontuação necessária para o fim de jogo foi atingida
-        if score == 60:
+        if score == 150:
             state = GAMEWON
 
         # ----- Gera saídas
@@ -1000,7 +943,7 @@ while state != DONE:
 
                     player = Player(assets)
                     bolinho = Bolinho(assets)
-                    capivara = Capivara(assets)
+                    capivara = Capivara(assets,1)
                     vida = Vidas(assets)
                     capivaramoto = CapivaraMoto(assets)
 
@@ -1010,11 +953,10 @@ while state != DONE:
                         all_bolinhos.add(bolinho)
 
                     for i in range(2):
-                        capivara = Capivara(assets)
+                        capivara = Capivara(assets,1)
                         all_sprites.add(capivara)
                         all_capivaras.add(capivara)
 
-                    all_sprites.add(player)
                     all_sprites.add(vida)
 
                     state = CHOOSE
@@ -1065,7 +1007,7 @@ while state != DONE:
 
                     player = Player(assets)
                     bolinho = Bolinho(assets)
-                    capivara = Capivara(assets)
+                    capivara = Capivara(assets,1)
                     vida = Vidas(assets)
                     capivaramoto = CapivaraMoto(assets)
 
@@ -1076,11 +1018,10 @@ while state != DONE:
                         all_bolinhos.add(bolinho)
 
                     for i in range(2):
-                        capivara = Capivara(assets)
+                        capivara = Capivara(assets,1)
                         all_sprites.add(capivara)
                         all_capivaras.add(capivara)
 
-                    all_sprites.add(player)
                     all_sprites.add(vida)
 
                     state = CHOOSE
