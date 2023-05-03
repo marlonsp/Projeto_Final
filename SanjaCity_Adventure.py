@@ -38,6 +38,12 @@ assets['background3'] = pygame.image.load('assets/img/fundo3.png')
 assets['background3'] = pygame.transform.scale(assets['background3'], (WIDTH, HEIGHT))
 assets['charchoose_img'] = pygame.image.load('assets/img/char_choose.png')
 assets['charchoose_img'] = pygame.transform.scale(assets['charchoose_img'], (WIDTH, HEIGHT))
+assets['charchoose1_img'] = pygame.image.load('assets/img/char_choose1.png')
+assets['charchoose1_img'] = pygame.transform.scale(assets['charchoose1_img'], (WIDTH, HEIGHT))
+assets['charchoose2_img'] = pygame.image.load('assets/img/char_choose2.png')
+assets['charchoose2_img'] = pygame.transform.scale(assets['charchoose2_img'], (WIDTH, HEIGHT))
+assets['charchoose3_img'] = pygame.image.load('assets/img/char_choose3.png')
+assets['charchoose3_img'] = pygame.transform.scale(assets['charchoose3_img'], (WIDTH, HEIGHT))
 assets['init_img'] = pygame.image.load('assets/img/init_img.png')
 assets['init_img'] = pygame.transform.scale(assets['init_img'], (WIDTH, HEIGHT))
 assets['telafim_img'] = pygame.image.load('assets/img/telafim_img.png')
@@ -504,7 +510,9 @@ game = True
 DONE = 0
 INIT = 1
 INSTRUCTIONS = 2
-CHOOSE = 3
+CHOOSE1 = 3
+CHOOSE2 = 11
+CHOOSE3 = 12
 FASE1 = 4
 FASE2INST = 5
 FASE2 = 6
@@ -526,7 +534,6 @@ pygame.mixer.music.play(loops=-1)
 while state != DONE:
     clock.tick(FPS)
 
-    #Tela inicial
     if state == INIT:
             # ----- Trata eventos
         for event in pygame.event.get():
@@ -535,7 +542,7 @@ while state != DONE:
                 state = DONE
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    state = CHOOSE
+                    state = CHOOSE1
 
         window.fill(BLACK)
         window.blit(assets['init_img'], init_rect)
@@ -543,8 +550,7 @@ while state != DONE:
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
 
-    #Tela de escolha de personagem
-    if state == CHOOSE:
+    if state == CHOOSE1:
         pygame.mixer.music.set_volume(0.2)
             # ----- Trata eventos
         for event in pygame.event.get():
@@ -554,23 +560,62 @@ while state != DONE:
             if event.type == pygame.KEYDOWN:
                 keys_down[event.key] = True
                 if event.key == pygame.K_a:
+                    state = CHOOSE2
+                if event.key == pygame.K_s:
                     char_choose = 1
                     char_change(char_choose)
                     state = INSTRUCTIONS
+
+        window.fill(BLACK)
+        window.blit(assets['charchoose1_img'], init_rect)
+
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+
+    if state == CHOOSE2:
+        pygame.mixer.music.set_volume(0.2)
+            # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_a:
+                    state = CHOOSE3
                 if event.key == pygame.K_s:
                     char_choose = 2
                     char_change(char_choose)
                     state = INSTRUCTIONS
-                if event.key == pygame.K_d:
+
+        window.fill(BLACK)
+        window.blit(assets['charchoose2_img'], init_rect)
+
+        # Depois de desenhar tudo, inverte o display.
+        pygame.display.flip()
+    
+    if state == CHOOSE3:
+        pygame.mixer.music.set_volume(0.2)
+            # ----- Trata eventos
+        for event in pygame.event.get():
+            # ----- Verifica consequências
+            if event.type == pygame.QUIT:
+                state = DONE
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_a:
+                    state = CHOOSE1
+                if event.key == pygame.K_s:
                     char_choose = 3
                     char_change(char_choose)
                     state = INSTRUCTIONS
 
         window.fill(BLACK)
-        window.blit(assets['charchoose_img'], init_rect)
+        window.blit(assets['charchoose3_img'], init_rect)
 
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
+
 
     #Tela de instruções
     if state == INSTRUCTIONS:
@@ -1017,7 +1062,7 @@ while state != DONE:
                     all_sprites.add(player)
                     all_sprites.add(vida)
 
-                    state = CHOOSE
+                    state = CHOOSE1
         window.fill(BLACK)
         window.blit(assets['telafim_img'], init_rect)
 
@@ -1083,7 +1128,7 @@ while state != DONE:
                     all_sprites.add(player)
                     all_sprites.add(vida)
 
-                    state = CHOOSE
+                    state = CHOOSE1
         window.fill(BLACK)
         window.blit(assets['telawin_img'], init_rect)
 
